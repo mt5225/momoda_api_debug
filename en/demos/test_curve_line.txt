@@ -1,0 +1,22 @@
+
+// draw curve
+var vecList = Vector3List();
+
+vecList.Add(Vector3(0,  1, 0));
+vecList.Add(Vector3(10, 1, 0));
+vecList.Add(Vector3(10, 1, 5));
+
+object.createCurveLine(vecList, Color.green);
+
+// dynamic curve
+var vecArray = [Vector3(0,1,5), Vector3(0,2,15), Vector3(10,4,15), Vector3(10,6,5)];
+var curveLine = object.createCurveLine(vecArray, "1D2702801708453680664DCABE70890B");
+curveLine.EnableDynamicExtensionAnim = true;
+curveLine.StartDynamicExtensionAnim();
+
+// arrow curve
+var vecArray2 = [Vector3(0, 1, 20), Vector3(10, 1, 20)];
+object.createArrowLine(vecArray2, {
+	"color": Color.red,
+	"arrowColor": Color.red
+});	

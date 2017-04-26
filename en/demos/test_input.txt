@@ -1,0 +1,60 @@
+
+// ---------------------------------------------------------
+// mouse left click, shoot bullets 
+// keyboard ASDW move avatar
+// using add script to obj method
+// ---------------------------------------------------------
+
+Player = {
+	obj : null,
+
+    // create bullet
+    function createBullet() {
+        var pos = this.obj.transformPoint(Vector3(0, 0.5, 1));
+        var dir = this.obj.transformDirection(Vector3.forward);
+        var bullet = object.create("5037d693f41e4090be685e30bca03220", pos);
+        bullet.addForce(dir*1000);
+    }
+
+    function Update() {
+        var speed = 0.07;
+        if (input.getKey(KeyCode.LeftShift))
+            speed *= 2;
+            
+        var moved = false;
+        
+        if (input.getKey(KeyCode.W)) {
+            this.obj.translate(Vector3.forward * speed);
+            moved = true;
+        }
+        
+        if (input.getKey(KeyCode.S)) {
+            this.obj.translate(Vector3.back * speed);
+            moved = true;
+        }
+        
+        if (input.getKey(KeyCode.A))
+            this.obj.yaw(-5);
+        
+        if (input.getKey(KeyCode.D))
+            this.obj.yaw(5);
+            
+        // if (moved)
+        //     this.obj.playAnim("奔跑");
+        // else
+        //     this.obj.stopAnim();
+        if (input.getMouseButtonUp(0)) {
+            this.createBullet();
+        }
+    }
+}
+
+// create object
+var obj = object.create("0bcba8ca78734b64a3dae3eb699a913c");
+
+// add script to object
+var script = obj.addScript(Player);
+script.obj = obj;
+
+// disable camera moving
+camera.enableMove = false;

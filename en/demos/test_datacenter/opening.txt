@@ -1,0 +1,267 @@
+// test_datacenter_opening
+
+// start
+function opening() {
+	// hide UI
+	switch3DPanel.enabled = false;
+	levelPanel.enabled = false;
+
+	var url = "http://www.3dmomoda.com/mmdclient/script/examples/demos/loading.bundle";
+    gui.load(url, function(ui){
+		util.setTimeout(function(){
+    	    ui.destroy();
+		    opening_step1(0);
+		 }, 7000);
+    });
+}
+
+// step one
+function opening_step1(delay) {
+	var pList = object.find("in_001").children;
+
+	camera.setPosition(Vector3(-7.1,8.8,-9.2));
+	camera.lookAt(Vector3(-3.1,3,-0.2));
+    
+	var listCount = pList.Count;
+	for(var i = 0; i < listCount; i ++) {
+	    var p = pList.get_Item(i);
+	    var pos = p.pos;
+	    pos.y = pos.y + 10;
+	    p.moveFrom({
+			"pos": pos, //position
+			"delay": delay, // delay 0.5 seconds
+			"orientToPath": false, // if follow path
+			"easeType": "easeInOutExpo",
+			"speed": 8
+		});
+		delay = (i > 16)  ?  delay + 0.03 : delay + 0.1; // change delay 
+	}
+
+	delay += 1.0;
+	opening_step2(delay);
+}
+
+// step two
+function opening_step2(delay) {
+	pList = object.find("in_002").children;
+
+	util.setTimeout(function(){	    
+	    camera.flyTo ({
+    		"eye": Vector3(-9.5,8.6,-11.7),
+		    "target": Vector3(-3.5,3,-5.3),
+    		"time": 1.0
+        });	    
+	 }, delay * 1000);	
+    
+	for(var i = 0; i < pList.Count; i ++) {
+	    var p = pList.get_Item(i);
+	    var pos = p.pos;
+	    pos.y = pos.y + 10;
+	    p.moveFrom({
+			"pos": pos, //position
+			"delay": delay, // delay 0.5 seconds
+			"orientToPath": false, // if follow path
+			"easeType": "easeInOutExpo",
+			"speed": 8 // speed in meter/second
+		});
+	    delay += 0.1;
+	}
+
+	delay +=1;
+	opening_step3(delay);
+}
+
+
+function opening_step3(delay) {
+	//step3
+	pList = object.find("in_003").children;
+
+	util.setTimeout(function(){
+	    camera.flyTo ({
+    		"eye": Vector3(13.9,9.3,-15.1),
+		    "target": Vector3(8.9,3,-5.8),
+    		"time": 1.0
+        });
+	    
+	 }, delay * 1000);
+    
+	for(var i = 0; i < pList.Count; i ++) {
+	    var p = pList.get_Item(i);
+	    var pos = p.pos;
+	    pos.y = pos.y + 10; 
+	    p.moveFrom({
+			"pos": pos, //position
+			"delay": delay, // delay 0.5 seconds
+			"orientToPath": false, // if follow path
+			"easeType": "easeInOutExpo",
+			"speed": 8 //  speed in meter/second
+		});
+	    delay +=0.1;
+	}
+
+	delay += 1;
+	opening_step4(delay);
+}
+
+function opening_step4(delay) {
+	pList = object.find("in_004").children;
+
+	util.setTimeout(function(){
+	    camera.flyTo ({
+    		"eye": Vector3(19.9,10.3,-7.9),
+		    "target": Vector3(16.5,3,-3.9),
+    		"time": 1.0
+        });
+	    
+	 }, delay * 1000);
+    
+	for(var i = 0; i < pList.Count; i ++) {
+	    var p = pList.get_Item(i);
+	    var pos = p.pos;
+	    pos.y = pos.y + 10;
+	    p.moveFrom({
+			"pos": pos, //position
+			"delay": delay, // delay 0.5 seconds
+			"orientToPath": false, // if follow path
+			"easeType": "easeInOutExpo",
+			"speed": 8 // speed in meter/second
+		});
+	    delay += 0.05;
+	}
+
+	delay += 1;
+	opening_step5(delay);
+}
+
+function opening_step5(delay) {
+	pList = object.find("in_005").children;
+
+	util.setTimeout(function(){
+	    camera.flyTo ({
+    		"eye": Vector3(27.3,11.5,-11.8),
+		    "target": Vector3(23.3,3,-4.4),
+    		"time": 1.0
+        });
+	    
+	 }, delay * 1000);
+    
+	for(var i = 0; i < pList.Count; i ++) {
+	    var p = pList.get_Item(i);
+	    var pos = p.pos;
+	    pos.y = pos.y +10;
+	    p.moveFrom({
+			"pos": pos, //position
+			"delay": delay, // delay 0.5 seconds
+			"orientToPath": false, // if follow path
+			"easeType": "easeInOutElastic",
+			"speed": 8 // speed in meter/second
+		});
+	    delay += 0.1;
+	}
+
+	delay += 1;
+	opening_step6(delay);
+}
+
+function opening_step6(delay) {
+	pList = object.find("out_002").children;
+	var pList2 = object.find("out_004").children;
+
+	util.setTimeout(function(){
+	    camera.flyTo ({
+    		"eye": Vector3(10.3,45.7,-28),
+		    "target": Vector3(9.7,3.1,-4.5),
+    		"time": 1.0
+        });
+	    for(var i = 0; i < pList.Count; i ++) {
+		    var p = pList.get_Item(i);
+		    var p2 = pList2.get_Item(i);
+		    p.show(true);
+		    p2.show(true);
+	    }
+	 }, delay * 1000);
+    
+	for(var i = 0; i < pList.Count; i ++) {
+	    var p = pList.get_Item(i);
+	    var p2 = pList2.get_Item(i);
+	    p.show(false);
+	    p2.show(false);
+	    var pos = p.pos;
+	    var pos2 = p2.pos;
+	    pos.x = pos.x - 10;
+	    pos2.x = pos2.x + 10;
+	    p.moveFrom({
+			"pos": pos,
+			"delay": delay,
+			"orientToPath": false,
+			"easeType": "easeInOutExpo",
+			"speed": 8
+		});
+		p2.moveFrom({
+			"pos": pos2,
+			"delay": delay,
+			"orientToPath": false,
+			"easeType": "easeInOutExpo",
+			"speed": 8
+		});
+	    delay += 0.1;
+	}
+
+	delay += 1;
+	opening_step7(delay);
+}
+
+function opening_step7(delay) {
+	p7List = object.find("out_001").children;
+	p7List2 = object.find("out_003").children;
+
+    util.setTimeout(function(){
+	    for(var i = 0; i < p7List.get_Count(); i ++) {
+		    var p = p7List.get_Item(i);
+		    var p2 = p7List2.get_Item(i);
+		    p.show(true);
+		    p2.show(true);
+	    }
+	}, delay * 1000);
+    
+	for(var i = 0; i < p7List.get_Count(); i ++) {
+	    var p = p7List.get_Item(i);
+	    var p2 = p7List2.get_Item(i);
+	    p.show(false);
+	    p2.show(false);
+	    var pos = p.pos;
+	    var pos2 = p2.pos;
+	    pos.z = pos.z + 10;
+	    pos2.z = pos2.z - 10;
+	    p.moveFrom({
+			"pos": pos,
+			"delay": delay,
+			"orientToPath": false,
+			"easeType": "easeInOutExpo",
+			"speed": 8
+		});
+		p2.moveFrom({
+			"pos": pos2,
+			"delay": delay,
+			"orientToPath": false,
+			"easeType": "easeInOutExpo",
+			"speed": 8 
+		});
+	    delay += 0.1;
+	}
+	
+	util.setTimeout(function(){
+	    camera.flyTo ({
+    		"eye": Vector3(-10.3,21.2,-32.7),
+		    "target": Vector3(6.6,3,0.7),
+    		"time": 1.0, 
+    		"complete":function() {
+				opening_finish();
+			}
+        });
+	}, delay * 1000);	
+}
+
+function opening_finish() {
+	init_gui();
+}

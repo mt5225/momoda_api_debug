@@ -1,0 +1,7 @@
+
+// mouse left click to create object
+
+util.addEventListener("click", function(event) {
+	if (event.target)
+		object.create("FF2A3E364B1E4B928891E05A9279C7A7", event.pos);
+});

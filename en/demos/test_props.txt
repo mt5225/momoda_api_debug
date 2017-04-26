@@ -1,0 +1,26 @@
+/**
+ * Object Properties
+ */
+
+// create object
+var obj = object.create("AB052B5B646E4A48B9C045096FF9B088");
+
+// add new property to object
+var age = 12;
+obj.addProperty("name", "larrow");
+obj.addProperty("age", tostring(age));
+obj.addProperty("weapon", "sword");
+
+// get property
+if (obj.hasProperty("weapon"))
+	print("My Weapon is: " + obj.getProperty("weapon"));
+
+// print all properties
+print("All Properties:" + obj.props.Count)
+foreach ( var i in pairs( obj.props ) )
+    print( "key：" + i.Key + " , " + i.Value);
+
+// get all object which have specific property
+var objList = object.findByProperty("weapon");
+for (var j = 0; j < objList.Count; j ++)
+	objList.get_Item(j).setColor(Color.blue);

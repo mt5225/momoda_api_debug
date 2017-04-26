@@ -1,0 +1,31 @@
+
+// create 3 objects in distance of 2.5 meters
+var objList = ObjectList();
+for(var i = 0; i < 3; i ++) {
+	var newObj = object.create("AB052B5B646E4A48B9C045096FF9B088", Vector3(i*2.5, 0, 0));
+	objList.Add(newObj);
+}
+
+// move camera
+var j = 0;
+function fly_to_next() {
+	// select one object
+    var obj = objList.get_Item(j ++);
+
+	// fly camera to object
+	camera.flyTo ({
+		"eye": obj.pos + Vector3(obj.size.x, obj.size.y, -obj.size.z*3),
+		"target": obj.center,
+		"time": 2.0,
+		"complete":function() {
+			util.setTimeout(fly_to_next, 1000); // fly to next object
+		}
+	});
+
+    // start over
+    if (j >= objList.Count)
+    	j = 0;
+}
+
+// start
+fly_to_next();

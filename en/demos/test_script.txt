@@ -1,0 +1,23 @@
+/**
+ * 添加脚本到一个物体身上，
+ * 脚本可以包含Start和Update等内部方法，可以被自动调用
+ */
+AutoRotate = {
+	speed : 1,
+	obj : null,
+
+	function Start() {
+		this.obj.pos = Vector3(0, 5, 0);
+	}
+
+    function Update() {
+    	this.obj.yaw(this.speed);
+    }
+}
+
+// 创建物体
+var obj = object.create("AB052B5B646E4A48B9C045096FF9B088");
+
+// 添加脚本
+var script = util.addObjectScript(obj, AutoRotate);
+script.obj = obj;

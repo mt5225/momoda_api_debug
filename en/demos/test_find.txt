@@ -1,0 +1,5 @@
+// find object with uid "Object01"
+var obj = object.find("Object01");
+
+// rotate -45 degree
+obj.yaw(-45);

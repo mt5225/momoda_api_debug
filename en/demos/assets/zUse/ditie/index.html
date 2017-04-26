@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dieit</title>
+    <style type="text/css">
+        body{
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+    window.onload = function () {
+        var canvas = document.querySelector("#canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var context =canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        var imgBeiJin = new Image();
+        imgBeiJin.onload = function () {
+            context.drawImage(imgBeiJin, 0, 0, window.innerWidth, window.innerHeight);
+            drawCircles(false, 0.530, 0.522);
+//            drawCircles(false, 0.373, 0.443);
+        };
+        imgBeiJin.src = 'http://www.3dmomoda.com/mmdclient/script/examples/demos/assets/zUse/tjdt-.png';
+
+        var imgJiShuiTan = new Image();
+        imgJiShuiTan.src = 'http://www.3dmomoda.com/mmdclient/script/examples/demos/assets/zUse/tub/cym.png';
+
+        var imgXiZhiMen = new Image();
+        imgXiZhiMen.src = 'http://www.3dmomoda.com/mmdclient/script/examples/demos/assets/zUse/tub/xzm.png';
+
+
+        function drawCircles(arg,scalX,scalY) {
+            context.beginPath();
+            context.arc(window.innerWidth*scalX, window.innerHeight*scalY, 8, 0, Math.PI*2);
+            context.fillStyle = "red";
+            context.strokeStyle = "black";
+            if (!arg) {
+                context.lineWidth = 1;
+            }
+            else {
+                context.lineWidth = 3;
+            }
+            context.fill();
+            context.stroke();
+        }
+
+        var isGo="" ;
+        canvas.onclick = function (e) {
+            console.log(e.x/window.innerWidth);
+            console.log(e.y/window.innerHeight);
+            var clickX = e.x;
+            var clickY = e.y;
+            var winWid = window.innerWidth;
+            var winHei = window.innerHeight;
+            var xjst = winWid*0.530;
+            var yjst = winHei*0.522;
+            var xxzm = winWid*0.373;
+            var yxzm = winHei*0.443;
+            if(clickX>xjst-9&&clickX<xjst+9&&clickY>yjst-9&&clickY<yjst+9){
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(imgBeiJin, 0, 0, window.innerWidth, window.innerHeight);
+                drawCircles(true, 0.530, 0.522);
+//                drawCircles(false, 0.373, 0.443);
+                context.drawImage(imgJiShuiTan, window.innerWidth - 354, window.innerHeight - 431);
+                isGo = "jst";
+            }
+//            else if(clickX>xxzm-9&&clickX<xxzm+9&&clickY>yxzm-9&&clickY<yxzm+9){
+//                context.clearRect(0, 0, canvas.width, canvas.height);
+//                context.drawImage(imgBeiJin, 0, 0, window.innerWidth, window.innerHeight);
+//                drawCircles(false, 0.529, 0.520);
+////                drawCircles(true, 0.373, 0.443);
+//                context.drawImage(imgXiZhiMen, window.innerWidth - 354, window.innerHeight - 431);
+//                isGo = "xzm"
+//            }
+            else if( clickX>window.innerWidth-354 && clickY>window.innerHeight-431){
+                if(isGo=="jst"){
+                    window.open("http://www.3dmomoda.com/browse?sceneid=20170316174202008617625");
+                }else if(isGo == "xzm"){
+                    alert("尚未开启");
+                }
+            }
+            else {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(imgBeiJin, 0, 0, window.innerWidth, window.innerHeight);
+                drawCircles(false, 0.530, 0.522);
+//                drawCircles(false, 0.373, 0.443);
+                isGo="";
+            }
+        };
+        canvas.ondblclick = function (e) {
+            var clickX = e.x;
+            var clickY = e.y;
+            var winWid = window.innerWidth;
+            var winHei = window.innerHeight;
+            var xjst = winWid*0.530;
+            var yjst = winHei*0.522;
+            var xxzm = winWid*0.373;
+            var yxzm = winHei*0.443;
+            if(clickX>xjst-9&&clickX<xjst+9&&clickY>yjst-9&&clickY<yjst+9){
+                window.open("http://www.3dmomoda.com/browse?sceneid=20170316174202008617625");
+            }else if(clickX>xxzm-9&&clickX<xxzm+9&&clickY>yxzm-9&&clickY<yxzm+9){
+                alert("尚未开启");
+            }
+        };
+
+    }
+</script>
+</body>
+</html>

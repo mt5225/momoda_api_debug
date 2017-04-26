@@ -1,0 +1,34 @@
+
+// create UI via external resource 
+
+function init_gui(ui) {
+	var building = world.buildingList.get_Item(0);
+        
+        ui.setText("Window/Title/Label", "Architecture");
+	// enter 
+	ui.setText("Window/Button1/Background/Label", "Enter");
+	ui.regButtonEvent("Window/Button1", function() {
+		level.change(building);
+	});
+
+	// expand 
+	ui.setText("Window/Button2/Background/Label", "Expand");
+	ui.regButtonEvent("Window/Button2", function(){
+		building.ExpandPlans();
+	});
+
+	// merge
+	ui.setText("Window/Button3/Background/Label", "Merge");
+	ui.regButtonEvent("Window/Button3", function() {
+		building.FoldingPlans();
+	});
+
+	// exit
+	ui.setText("Window/Button4/Background/Label", "Exit");
+	ui.regButtonEvent("Window/Button4", function() {
+		level.change(world);
+	});
+}
+
+var url = "http://www.3dmomoda.com/mmdclient/script/examples/demos/scifi_ui.bundle"
+gui.load(url, init_gui);

@@ -1,0 +1,22 @@
+
+// 创建地球
+var earth = object.create("899f3fa7205640fcb67af2c679bf8339", Vec3(0, 2, 0));
+
+// 创建月球
+var moon = object.create("5037d693f41e4090be685e30bca03220");
+moon.parent = earth;
+moon.setPosition(earth.pos + Vec3(2, 0, 0));
+moon.setScale(Vec3.one*0.5);
+moon.addTail(0.05, 0, Color.red, 2.0);
+
+// 创建卫星
+var satellite = object.create("a6bbe77854f44414ac6facc88ac406b1");
+satellite.parent = moon;
+satellite.setPosition(moon.pos + Vec3(0, 1, 0));
+satellite.setScale(Vec3.one*0.001);
+
+// 更新
+util.setRenderCallback(function(){
+    earth.yaw(1.5);
+    moon.roll(2);
+})

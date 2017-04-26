@@ -1,0 +1,40 @@
+var buttonY = 80;
+var buttonHeight = 50;
+
+
+// 创建平面物体
+gui.createButton("平面排列物体", 60, -buttonY, 200, buttonHeight, function() {
+	selection.clear();
+	
+	var step = 2;
+	for (var x = 0; x < 10; x ++) {
+	    for (var y = 0; y < 10; y ++) {
+	        var obj = object.create("AB052B5B646E4A48B9C045096FF9B088");
+	    	obj.setPosition	(x*step, 0, y*step); 
+			selection.add(obj);
+	    }
+	}
+
+});
+buttonY += buttonHeight*1.5;
+
+// 创建球表面物体
+gui.createButton("球面排列物体", 60, -buttonY, 200, buttonHeight, function() {
+	selection.clear();
+	var r = 10;
+	for (var i = 0; i < 360; i += r) {
+	    for (var j = 0; j < 180; j += r) {
+
+	        var obj = object.create("AB052B5B646E4A48B9C045096FF9B088");
+	 
+	 		var x = r * Mathf.Cos(i * Mathf.Deg2Rad) * Mathf.Sin(j* Mathf.Deg2Rad);
+	 		var y = r * Mathf.Sin(i * Mathf.Deg2Rad) + r * 1.5;
+	 		var z = r * Mathf.Cos(i * Mathf.Deg2Rad) * Mathf.Cos(j* Mathf.Deg2Rad);
+	    	obj.setPosition	(x, y, z); 
+
+			selection.add(obj);
+	    }
+	}
+
+});
+buttonY += buttonHeight*1.5;

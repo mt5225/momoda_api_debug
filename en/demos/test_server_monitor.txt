@@ -1,0 +1,53 @@
+
+// ---------------------------------------------------
+// simulate push data to server
+// ！！！remove the following code while deploy to production environment
+util.setInterval(function() {
+	var v = util.randomInt(0, 10);
+	var c = util.randomDefaultColor();
+	server.sim.push({
+		"Obj01":{
+			"name":"larrow",
+			"value": v,
+			"color": [c.r, c.g, c.b]
+		}
+	});
+}, 3000);
+// ！！！remove the following code while deploy to production environment
+// ---------------------------------------------------
+
+
+// init
+function init(res) {
+	// create object
+	var obj = object.create("AB052B5B646E4A48B9C045096FF9B088");
+	obj.uid = "Obj01";
+
+	// create UI
+	var ui = gui.create(res);
+	var offsetY = obj.size.y;
+	ui.setObject(obj, Vector3(0, offsetY, 0));
+	ui.setScale(0.3, 0.3);
+	ui.setText("Button/Text", i);
+	ui.regButtonEvent("Button", function() {
+		console.log("click button: " + obj.uid);
+	});
+
+	// update sign above
+	util.setInterval(function() {
+		if (obj.data) {
+			ui.setText("Button/Text", obj.data["value"]);
+			if (obj.data["color"]) {
+				var arr = obj.data["color"]
+				var clr = Color(arr[0], arr[1], arr[2]);
+				obj.setColor(clr);
+			}
+		}
+	}, 3000);
+}
+
+// get balloon button
+util.download({
+	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/balloon_button.bundle", 
+	"success": init
+});

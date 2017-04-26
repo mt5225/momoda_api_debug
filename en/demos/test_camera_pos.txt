@@ -1,0 +1,14 @@
+
+// create object
+var obj = object.create("82076f2763e8413f9a7a2e68ef8a2ef4");
+
+// set camera postion
+gui.createButton("Front", Rect(10, Screen.height - 200, 160, 40), function() {
+	camera.setPosition(obj.center + Vector3.forward*20);
+	camera.lookAt(obj.center);
+});
+
+// focus on object
+gui.createButton("Focus", Rect(10, Screen.height - 150, 160, 40), function() {
+    camera.fit(obj);
+});

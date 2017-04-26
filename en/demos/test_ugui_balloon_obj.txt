@@ -1,0 +1,79 @@
+
+// ---------------------------------------------------------
+// create object with sign
+// download sign from url
+// for now not includes sign management/destroy code
+// ---------------------------------------------------------
+
+// define moving method
+function move_to_next(obj) {
+	obj.moveTo({
+		"pos": util.randomVector3Around(obj, 8, 0, 8), // random location
+		"delay": 1.0,
+		"speed": 1,
+		"oncomplete":function() {
+			move_to_next(obj);
+		}
+	});
+}
+
+// create boxes and move them
+var i = 0;
+for (var x = -2; x < 2; x ++) {
+    for (var y = -2; y < 2; y ++) {
+        var obj = object.create("72E49F8970EE435EA03F6580BB9BE4F6", Vector3(x*4, 0.0, y*4));
+        obj.uid = "Obj_" + (i++);
+        move_to_next(obj);
+    }
+}
+
+// URL to download sign
+var urlBase = "http://www.3dmomoda.com/mmdclient/script/examples/demos/";
+
+// download sign for 1st half of boxes
+util.download({
+	"url": urlBase + "balloon_button.bundle", 
+	"success": function(res) {
+		for(var i = 0; i < 8; i ++) {
+			var obj = object.find("Obj_"+i);
+			var ui = gui.create(res);
+
+			var offsetY = obj.size.y;
+			ui.setObject(obj, Vector3(0, offsetY, 0));
+			ui.setScale(0.3, 0.3);
+			ui.setText("Button/Text", i);
+			ui.regButtonEvent("Button", function() {
+				console.log("click button: " + obj.uid);
+			});
+		}
+	}
+});
+// download sign for 2nd half of boxes
+util.download({
+	"url": urlBase + "outline_button.bundle", 
+	"success": function(res) {
+		var ui;
+		for(var i = 8; i < 16; i ++) {
+			var obj = object.find("Obj_"+i);
+			ui = gui.create(res);
+
+			var offsetY = obj.size.y;
+			ui.setObject(obj, Vector3(0, offsetY, 0));
+			ui.setText("Button/Text", obj.uid);
+			ui.regButtonEvent("Button", function() {
+				console.log("click button: " + obj.uid);
+			}); 
+		}
+		// change ui image
+		change_ui_image(ui);
+	}
+});
+
+function change_ui_image(ui){	
+	util.downloadTexture({
+		"url": urlBase + "demo_panel_001.png",
+		"success":function(tex) {
+			ui.setImage("Button",tex);
+		}
+	});
+}

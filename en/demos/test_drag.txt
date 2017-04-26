@@ -1,0 +1,30 @@
+
+// create object
+var obj = object.create("AB052B5B646E4A48B9C045096FF9B088");
+
+// save target
+var dragObj = null;
+
+// start dragging
+util.addEventListener("dragstart", function(event) {
+	if (event.obj && event.button == 0) {
+		dragObj = event.obj;
+		dragObj.setPickEnabled(false);
+		camera.enableRot = false;
+	}
+});
+
+// dragging
+util.addEventListener("drag", function(event) {
+	if (dragObj && event.button == 0)
+		dragObj.pos = event.pos;
+});
+
+// end dragging
+util.addEventListener("dragend", function(event) {
+	if (dragObj && event.button == 0) {
+		dragObj.setPickEnabled(true);
+		dragObj = null;
+		camera.enableRot = true;
+	}
+});

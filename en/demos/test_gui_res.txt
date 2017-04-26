@@ -1,0 +1,33 @@
+
+// create UI using textures
+
+function init_gui(textures) {
+	var y = 160;
+	var sz = 54;
+
+	gui.createButton({
+		"rect":Rect(60, y, sz, sz), 
+		"normal":textures["pointSearchOpen.png"],
+		"active":textures["pointSearchClose.png"],
+		"onclick":function() {
+	    	print("button 1");
+		}
+	});
+	y += sz*1.5;
+
+	gui.createButton({
+		"rect":Rect(60, y, sz, sz), 
+		"normal":textures["shouqi2.png"],
+		"active":textures["shouqi1.png"],
+		"onclick":function() {
+	    	print("button 2");
+		}
+	});
+	y += sz*1.5;
+}
+
+var url = "http://www.3dmomoda.com/mmdclient/script/examples/demos/gui_images.zip"
+util.downloadTextures({
+    "url": url, 
+    "success": init_gui
+});

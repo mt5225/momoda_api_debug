@@ -1,0 +1,18 @@
+
+// set color
+var obj = object.create("FF2A3E364B1E4B928891E05A9279C7A7", Vector3(0, 0, 0));
+obj.setColor(Color.blue);
+
+// set transparent
+obj = object.create("FF2A3E364B1E4B928891E05A9279C7A7", Vector3(2, 0, 0));
+obj.setTransparent(0.32);
+
+// set color flash 
+obj = object.create("FF2A3E364B1E4B928891E05A9279C7A7", Vector3(4, 0, 0));
+obj.setColorFlash(true, Color.red);
+
+// hide/show
+obj = object.create("FF2A3E364B1E4B928891E05A9279C7A7", Vector3(6, 0, 0));
+util.setInterval(function(){
+   obj.show(!obj.isShown); 
+}, 1000);

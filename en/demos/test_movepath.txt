@@ -1,0 +1,23 @@
+// create object
+var obj = object.create("72E49F8970EE435EA03F6580BB9BE4F6");
+
+// create array of points
+var path = Vector3List();
+for (var degree = 0; degree < 360; degree += 10)
+	path.Add(Vec3(Math.Cos(degree*Math.Deg2Rad)*10,0.5,Math.Sin(degree*Math.Deg2Rad)*10));
+
+// move object along path
+obj.movePath({
+	"path": path,
+	"time": 10,
+	"lookPos": Vector3.zero,
+	"loopType": "loop"
+});
+
+// add a tail to object
+obj.addTail({
+	"startWidth": 0.6,
+	"endWidth":0,
+	"color":Color.red,
+	"time": 5
+});

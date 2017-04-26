@@ -1,0 +1,107 @@
+
+
+// ---------------------------------------------------------
+// state object
+state = {
+    current : null,
+    
+    function change(st) {
+        if (this.current == st)
+            return;
+
+        // exit previous state
+        if (this.current && st != this.current) {
+            if (this.current["onleave"])
+                this.current["onleave"]();
+            this.current = null;
+        }
+
+        // enter state
+        if (st) {
+            if (st["onenter"])
+                st["onenter"]();
+            this.current = st;
+            //print("change state: "+dragObjState);
+        }
+    }
+
+    function handleEvent(event) {
+        if (!this.current)    
+            return;
+            
+        // handle event
+        var funcName = "on" + event.type;
+        if (this.current[funcName])
+            this.current[funcName](event);
+    }
+}
+
+// ---------------------------------------------------------
+// handle mouse click event
+var downPos = null;
+function register_events() {
+
+	util.addEventListener("mousedown", function(event) {
+		downPos = Vector2(event.x, event.y);
+	});
+
+	util.addEventListener("click", function(event) {
+		if (Vector2.Distance(downPos, Vector2(event.x, event.y)) > 4) // ignore if more than 4 pixels
+			return;
+
+	    state.handleEvent(event);
+	});
+
+}
+
+// ---------------------------------------------------------
+// user interface
+function init_gui() {
+	var btnOffsetY = 80;
+	var btnWidth = 160;
+	var btnHeight = 40;
+
+
+	btnOffsetY += btnHeight* 1.5;
+
+	gui.createButton("BarChart", Rect(20, btnOffsetY, btnWidth, btnHeight), function() {
+		show_bar_chart();
+		state.change( null );
+	});
+	btnOffsetY += btnHeight* 1.5;
+
+	gui.createButton("Open", Rect(20, btnOffsetY, btnWidth, btnHeight), function() {
+		recover_cabinent();
+		state.change( cabinetState );
+	});
+	btnOffsetY += btnHeight* 1.5;
+
+	gui.createButton("AC", Rect(20, btnOffsetY, btnWidth, btnHeight), function() {
+		state.change( airState );
+	});
+	btnOffsetY += btnHeight* 1.5;
+
+	gui.createButton("Server Down", Rect(20, btnOffsetY, btnWidth, btnHeight), function() {
+		recover_cabinent();
+		state.change( explodeState );
+	});
+	btnOffsetY += btnHeight* 1.5;
+}
+
+
+// ---------------------------------------------------------
+// main 
+function main() {
+	// register event
+	register_events();
+
+	// enter building
+	var building = world.buildingList.get_Item(0);
+	var plan = building.planList.get_Item(0);
+	level.change(plan);
+
+	// UI init
+	init_gui();	
+}
+
+main();

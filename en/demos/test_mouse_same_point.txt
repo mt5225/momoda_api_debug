@@ -1,0 +1,32 @@
+
+// ---------------------------------------------------------
+// mouse left click make box jump, ctrl + click jump even higher
+// donot jump if distance between mouse and box is larger than 4 pixels
+// ---------------------------------------------------------
+
+// create boxes
+var objList = ObjectList();
+for (var x = -4; x < 4; x ++) {
+    for (var y = -4; y < 4; y ++) {
+        var obj = object.create("AB052B5B646E4A48B9C045096FF9B088", Vector3(x*2, 1, y*2));
+        obj.addGravity(1);
+    	objList.Add(obj);
+    }
+}
+
+// register mouse down event
+var downPos = null;
+util.addEventListener("mousedown", function(event) {
+	downPos = Vector2(event.x, event.y);
+});
+
+// register mouse click event
+util.addEventListener("click", function(event) {
+	if (Vector2.Distance(downPos, Vector2(event.x, event.y)) > 4) // donot jump if distance between mouse and box is larger than 4 pixels
+		return;
+
+	if (event.obj) {
+		var force = event.ctrlKey ? 400 : 200;
+		event.obj.addForce(0, force, 0);
+	}
+});

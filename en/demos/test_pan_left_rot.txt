@@ -1,0 +1,116 @@
+
+// ---------------------------------------------------------
+// Drag Objct Around，Supports multi-selection：
+// mouse click: select object；
+// mouse click and move: move object;
+// mouse click and move + shift: lift object; 
+// mouse click and move + ctrl: rotate object; 
+// ---------------------------------------------------------
+
+// create
+object.create("81807868C78141BFB2E93275AC3ABB39");
+
+// ---------------------------------------------------------
+// drag object
+dragObjState = {
+
+	 // drag target
+	dragObj: null,
+
+	// save last mouse position 
+	lastPos: Vector2.zero,
+
+	// lift
+    function lift() {
+		var plane = Plane(camera.backward, this.dragObj.pos); // vertical plane
+		var result = picking.raycast(plane);
+		if (result.picked)
+			this.dragObj.setPositionY(result.point.y);
+    }
+
+    // move
+    function pan() {
+		var plane = Plane(Vector3.up, this.dragObj.pos); // horizontal plane
+		var result = picking.raycast(plane);
+		if (result.picked)
+			this.dragObj.setPositionXZ(result.point.x, result.point.z);
+    }
+
+    // rotate 
+    function rotate(ox, oy) {
+    	var y = Math.Abs(ox) > Math.Abs(oy) ? -ox : oy; 
+    	this.dragObj.yaw(15 * y * Time.deltaTime);
+    }
+
+    // start dragging
+    function ondragstart(event) {
+		if (event.obj) {
+			camera.setCtrlEnabled(false);
+			this.dragObj = event.obj;
+		}
+    	this.lastPos = Vector2(event.x, event.y);
+    }
+    
+    // dragging
+    function ondrag(event) {
+    	if (!this.dragObj)
+    		return;
+
+		if (event.button == 0) {
+			// uplift
+			if (event.shiftKey)
+				this.lift();
+			// rotate
+			else if (event.ctrlKey)
+				this.rotate( event.x - this.lastPos.x, event.y - this.lastPos.y);
+			// translation
+			else
+				this.pan();
+		}
+
+    	this.lastPos = Vector2(event.x, event.y);
+    }
+
+    // release
+    function ondragend(event) {
+		if (this.dragObj) {
+			camera.setCtrlEnabled(true);
+			this.dragObj = null;
+		}
+    }
+
+}
+
+// ---------------------------------------------------------
+// status object
+state = {
+    current : null,
+    
+    function handleEvent(event) {
+        if (!this.current)    
+            return;
+            
+        // handle event
+        var funcName = "on" + event.type;
+        if (this.current[funcName])
+            this.current[funcName](event);
+    }
+}
+state.current = dragObjState;
+
+// ---------------------------------------------------------
+// register event
+
+// dragging event
+util.addEventListener("dragstart", function(event) {
+	state.handleEvent(event);
+});
+
+util.addEventListener("drag", function(event) {
+	state.handleEvent(event);
+});
+
+util.addEventListener("dragend", function(event) {
+	state.handleEvent(event);
+});
+

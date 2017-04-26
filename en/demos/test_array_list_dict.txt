@@ -1,0 +1,152 @@
+// container operations
+
+function test_array() {
+    console.clear();
+    print("*************Script Array Operation*************");
+    
+    //create empty array
+    var arr = [];
+    
+    //add element
+    for(var i = 0; i < 5; i++)
+        array.add(arr, "item_" + i);
+    
+    //iteration
+    var str = "iteration:  ";
+    for(var i = 0; i < arr.length; i++)
+        str += arr[i] + " ";
+    print (str);
+    
+    //get element
+    print("get element:  " + arr[0]);
+    
+    //modify element
+    arr[1] = "change_item_1";
+    print("modify element:  " + arr[1]);
+    
+    //remove element
+    array.removeat(arr, 2);
+    array.remove( arr , "item_3");
+    str = "remove element:  ";
+    for(var i = 0; i < arr.length; i++)
+        str += arr[i] + " ";
+    print (str);
+    
+    //insert element
+    idx = 1;
+    array.insert(arr, idx , "newItem" + idx);
+    str = "insert element:  ";
+    for(var i = 0; i < arr.length; i++)
+        str += arr[i] + " ";
+    print (str);
+
+}
+
+function test_table() {
+    console.clear();
+    print("*************Script HashTable Operation*************");
+    
+    //create
+    var tbl = { 
+        key0 = "item1", 
+        key1 = 2, 
+        key2 = true, 
+        key3 = KeyCode.A, 
+        key4 = function(msg) {
+            print(msg);
+        }
+    };
+    
+    //iterate
+    var str = "Iterate Key:  ";
+    foreach( var item in pairs( table.keys( tbl ) ) )
+        str += item.value + " ";
+    print (str);
+
+    str = "Iterate Value:  ";
+    foreach( var item in pairs( table.values( tbl ) ) )
+        str += item.value + " ";
+    print (str);
+    
+    //get element
+    print("get key0: " + tbl["key0"]);
+    tbl["key4"]("hello talbe");
+    
+    //remove element
+    table.remove( tbl , "key1" );
+    str = "remove element:  ";
+    foreach( var item in pairs( table.values( tbl ) ) )
+        str += "{" + item.key + ":" + item.value + "} ";
+    print(str); 
+}
+
+function test_csharp_array() {
+    console.clear();
+    print("*************Internal Array Operation*************");
+
+    //create
+    var vecList = Vector3List();
+    for(var i = 0; i < 5; i++)
+        vecList.Add(Vector3(i, 0, 0));
+    var vecArray = vecList.ToArray();
+    
+    //iterate
+    var str = "iterate:  ";
+    for(var i = 0; i < vecArray.Length; i++)
+        str += vecArray.GetValue(i) + " ";
+    print (str);
+    
+    //get element
+    print("get element:  " + vecArray.GetValue(0));
+    
+    //modify element
+    vecArray.SetValue(Vector3.one, 1);
+    print("modify element:  " + vecArray.GetValue(1));    
+}
+
+function test_csharp_list() {
+    console.clear();
+    print("*************Interal List Operations*************");
+    
+    //create empty list
+    var list = Vector3List();
+    
+    //add new element
+    for(var i = 0; i < 5; i++)
+        list.Add(Vector3(i, 0, 0));
+    
+    //iteration
+    var str = "iterate:  ";
+    for(var i = 0; i < list.Count; i++)
+        str += list.get_Item(i) + " ";
+    print (str);
+    
+    //get element
+    print("获取:  " + list.get_Item(0));
+    
+    //modify element
+    list.set_Item(1, Vector3.one);
+    print("修改:  " + list.get_Item(1));
+    
+    //remove element
+    list.RemoveAt(2);
+    str = "remove:  ";
+    for(var i = 0; i < list.Count; i++)
+        str += list.get_Item(i) + " ";
+    print (str);
+    
+    //insert element
+    list.Insert(2 , Vector3.one);
+    str = "插入:  ";
+    for(var i = 0; i < list.Count; i++)
+        str += list.get_Item(i) + " ";
+    print (str);
+}
+
+// create UI
+gui.createButton("Script Array", Rect(20, 100, 150, 30), test_array);
+gui.createButton("Script HashTable", Rect(20, 150, 150, 30), test_table);
+gui.createButton("Internal Array", Rect(20, 200, 150, 30), test_csharp_array);
+gui.createButton("Internal List", Rect(20, 250, 150, 30), test_csharp_list);
+
+

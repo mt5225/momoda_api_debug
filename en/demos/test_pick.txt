@@ -1,0 +1,20 @@
+
+// 单击左键事件
+var lastPickObj = null;
+util.addEventListener("click", function(btn) {
+	if (btn != 0)
+		return;
+
+	// 只拾取列表中的物体
+	selector.enabled = false; // 临时设置
+	var result = picking.raycast();
+	var obj = result.obj;
+
+	if (result.picked && typeof(obj) == Placement)
+		obj.setColor(Color.red);
+
+	// 清空上一次是
+	if (lastPickObj != null && lastPickObj != obj)
+		lastPickObj.setColor(Color.white);
+	lastPickObj = obj;	
+})

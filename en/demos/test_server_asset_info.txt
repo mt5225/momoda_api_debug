@@ -1,0 +1,39 @@
+
+// ---------------------------------------------------
+// simulate backend data storage server
+// ！！！ remove the following code while deploy to production environment
+server.sim.set({
+	"Obj01":{
+		"name":"larrow",
+		"descript": "Developer"
+	}, 
+	"Obj02":{
+		"name":"chr",
+		"descript": "Art Design"
+	}
+});
+// ！！！remove the following code while deploy to production environment
+// ---------------------------------------------------
+
+
+// init
+function init(res) {
+	// create object
+	var obj01 = object.create("AB052B5B646E4A48B9C045096FF9B088");
+
+	// create UI
+	var ui = gui.create(res);
+	var offsetY = obj01.size.y;
+	ui.setObject(obj01, Vector3(0, offsetY, 0));
+	ui.setScale(0.3, 0.3);
+
+	server.get("Obj01", function(json) {
+		ui.setText("Button/Text", json["descript"]);
+	});
+}
+
+// get message button
+util.download({
+	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/message_button.bundle", 
+	"success": init
+});

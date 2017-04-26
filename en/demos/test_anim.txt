@@ -1,0 +1,27 @@
+﻿
+var obj = object.create("97956964e78e41f79b190b59edf447e2");
+
+gui.createButton("RUN", Rect(100, 100, 100, 30), function() {
+    obj.playAnim("RUN");
+});
+
+gui.createButton("FALL", Rect(100, 140, 100, 30), function() {
+    obj.playAnim("FALL");
+});
+
+gui.createButton("WAVE", Rect(100, 180, 100, 30), function() {
+    obj.playAnim("WAVE");
+});
+
+gui.createButton("ROLL", Rect(100, 220, 100, 30), function() {
+    obj.playAnim("ROLL");
+});
+
+gui.createButton("STOP", Rect(100, 270, 100, 30), function() {
+    obj.stopAnim();
+});
+
+gui.createSlider(Rect(100, 340, 200, 10), 1, 0, 5, function(v){ 
+	obj.setAnimSpeed(v);
+});
+

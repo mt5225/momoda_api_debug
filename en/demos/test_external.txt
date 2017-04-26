@@ -1,0 +1,9 @@
+// passing json data to external function
+var jsonObj = {
+	"name":"larrow",
+	"age":10
+}
+util.externalCall("external_function", jsonObj);
+
+// run external javascript
+// util.externalEval("alert('hello world')");

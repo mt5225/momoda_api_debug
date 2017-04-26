@@ -1,0 +1,23 @@
+/**
+ * Associate script to object. Script could implements Start, Update, etc. methods,
+ * which is called by system automatically
+ */
+AutoRotate = {
+	speed : 0,
+	obj : null,
+
+	function Start() {
+		this.speed = util.randomFloat(1, 8);
+	}
+
+    function Update() {
+    	this.obj.yaw(this.speed);
+    }
+}
+
+// Creare Object then link to script.
+for(var i = 0; i < 3; i ++) {
+	var obj = object.create("AB052B5B646E4A48B9C045096FF9B088", Vector3(i*2.5, 0, 0));
+	var script = obj.addScript(AutoRotate);
+	script.obj = obj;
+}

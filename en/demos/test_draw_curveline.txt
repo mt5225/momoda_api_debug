@@ -1,0 +1,123 @@
+
+// ---------------------------------------------------------
+// Draw Curve Line：
+// mouse left click: add point
+// mouse right click: end drawing
+// ---------------------------------------------------------
+
+// create curve
+drawCurveState = {
+    curve : null,
+    pickedPos : null,
+
+    function pick() {
+        var plane = Plane(Vector3.up, FloorPlan.current.pos); // horizental plane
+        var result = picking.raycast(plane);
+        if (!result.picked)
+            return false;
+
+        var pos = result.point;
+        this.pickedPos = Vector3(pos.x, pos.y + 0.1, pos.z);
+        return true;
+    }
+
+    function put() {
+        if (!this.pick())
+            return;
+
+        // create curve
+    	if (this.curve == null) {
+        	var vecList = Vector3List();
+        	vecList.Add(this.pickedPos);
+        	vecList.Add(this.pickedPos);
+        	this.curve = object.createCurveLine(vecList);
+            CurveLine.IsEditMode = true;
+    	} 
+    	// update curve
+    	else {
+    		this.curve.addPoint(this.pickedPos);
+    		this.curve.build();
+    	}
+    }
+    
+    function update() {
+        if (this.curve == null || !this.pick())
+            return;
+
+		// save last mouse position
+		this.curve.setLastPoint(this.pickedPos);
+		
+		// updage wholeline
+		this.curve.refresh();
+        this.curve.build();        
+    }
+    
+    function finish() {
+        if (this.curve == null)
+            return;
+            
+        // remove if only two point in array
+		if(this.curve.points.Count == 2) {
+			this.curve.destroy();
+		} 
+		// otherwise remove last point from array
+		else {
+			this.curve.removeLastPoint();
+			this.curve.build();
+		}
+		this.curve = null;  
+    }
+    
+    function onclick(event) {          
+    	if (event.button == 0) {
+            this.put();
+            camera.setCtrlEnabled(false);
+    	} else if (event.button == 1) {
+    	    this.finish();
+    	    camera.setCtrlEnabled(true);;
+    	}
+    }
+    
+    function onmousemove(event) {
+        this.update();
+    }
+}
+
+
+// ---------------------------------------------------------
+// status object
+state = {
+    current : null,
+    
+    function handleEvent(event) {
+        if (!this.current)    
+            return;
+            
+        // handle event
+        var funcName = "on" + event.type;
+        if (this.current[funcName])
+            this.current[funcName](event);
+    }
+}
+
+state.current = drawCurveState;
+
+// ---------------------------------------------------------
+// mouse click event
+var downPos = null;
+util.addEventListener("mousedown", function(event) {
+	downPos = Vector2(event.x, event.y);
+});
+
+// mouse click event
+util.addEventListener("click", function(event) {
+	if (Vector2.Distance(downPos, Vector2(event.x, event.y)) > 4 || !event.target)
+		return;
+		
+	state.handleEvent(event);
+});
+
+// mouse move event
+util.addEventListener("mousemove",function(event) {
+	state.handleEvent(event);
+});

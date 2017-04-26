@@ -1,0 +1,219 @@
+
+// cabinet class definition
+Cabinet = {
+	obj : null,
+    bundleId : "A41E7E540B6140EC8F40E678F0ED19F3",
+    racks: null,
+    isOpen: false,
+
+	function createRacks() {
+		if (this.racks != null)
+			return;
+
+		this.racks = [];
+        for (var i = 1; i < 15; i++) {
+	        var rack = object.create(this.bundleId, this.obj);
+	        var size = rack.size;
+	        var y = i * (size.y + 0.01);
+	        var z = size.z * 0.8;
+	        var loc = Vector3(0, y, z);
+	        rack.setLocalPosition(loc);
+            array.add(this.racks, rack);
+        }
+	}
+
+	function destroyRacks() {
+		if (this.racks == null)
+			return;
+
+		for(var i = 0; i < this.racks.length; i ++) {
+			var rack = this.racks[i];
+			rack.destroy();
+		}
+		array.clear(this.racks);
+		this.racks = null;
+	}
+
+	function openDoor() {
+		if (this.isOpen)
+			return;
+
+		if (this.racks == null)
+			this.createRacks();
+
+		this.obj.playAnim("open_all");
+		this.isOpen = true;
+	}
+
+	function closeDoor() {
+		if (!this.isOpen)
+			return;
+
+		if (this.racks != null)
+			this.destroyRacks();
+
+		this.obj.playAnim("close_all");
+		this.isOpen = false;
+	}
+
+	function openOrClose() {
+		if (this.isOpen)
+			this.closeDoor();
+		else
+			this.openDoor();
+	}
+}
+
+//  open/close state
+cabinetState = {
+
+    objList : null
+
+	function initCabinets() {
+		for(var i = 0; i < this.objList.Count; i ++) {
+			var obj = this.objList.get_Item(i);
+			var cabinet = obj.addScript(Cabinet, "Cabinet");
+			cabinet.obj = obj;
+		}
+	}
+
+	function closeAllCabinets() {
+		for(var i = 0; i < this.objList.Count; i ++) {
+			var obj = this.objList.get_Item(i);
+			var cabinet = obj.getScript("Cabinet");
+			cabinet.closeDoor();
+		}
+	}
+
+    // enter
+    function onenter() {
+        selector.enabled = false;
+
+        if (this.objList == null) {
+			this.objList = object.find("in_001").children;
+			this.initCabinets();
+		}
+    }
+
+    // close
+    function onleave() {
+        selector.enabled = true;
+        selector.ClearSelection();
+        this.closeAllCabinets();
+    }
+
+
+    function onclick(event) {      
+        if (event.button == 0) {
+            var result = picking.raycastObjectList(this.objList);
+			if (result.picked) {
+				var cabinet = result.obj.getScript("Cabinet");
+				cabinet.openOrClose();
+			}
+		}
+    }
+}
+
+
+// select/un-select state
+explodeState = {
+
+    objList : ObjectList()
+
+    // select
+    function onenter() {
+        selector.enabled = false;
+
+        var firstexplode = object.create("20170210164341338608173388");
+        firstexplode.setPosition(0, 2000, 0);
+
+        var boList = objectManager.objectList;
+        for(var i = 0; i < boList.Count; i++){
+            var bo = boList.get_Item(i);
+            
+            if(bo.ClsID == 3){
+                bo.addGravity(3);
+                this.objList.Add(bo);
+            }
+        }
+    }
+
+    // un-select
+    function onleave() {
+    	for(var i = 0; i < this.objList.Count; i++) {
+    		var bo = this.objList.get_Item(i);
+            var rid = bo.gameObject.GetComponent(Rigidbody);
+            GameObject.Destroy(rid);
+
+		    bo.transform.localRotation = bo.initRot;
+		    bo.transform.localPosition = bo.initPos;
+        }
+    }
+
+
+    function onclick(event) {  
+    	if (!event.target)
+    		return;
+
+		var explodePos = Vector3(event.pos.x, 0.1, event.pos.z);
+    	var explode = object.create("20170210164341338608173388");
+    	explode.setPosition(explodePos);    	
+    	
+    	for(var i = 0; i < this.objList.Count; i++){
+            var bo = this.objList.get_Item(i);
+            var pos = bo.transform.position;
+            var distance = 1 + Vector3.Distance(explodePos, pos) * 0.3;
+            var force = 2000 * Mathf.Log(1 - 1 / distance, 0.5);
+            var rid = bo.gameObject.GetComponent(Rigidbody);
+            var dir = Vector3(pos.x-explodePos.x,pos.y-explodePos.y,pos.z-explodePos.z);
+            if(distance < 2)
+                rid.AddForce(dir * force);
+        }
+
+    }
+}
+
+
+// AC state
+airState = {
+
+    portList = null;
+    parList = ObjectList();
+
+    // enter
+    function onenter() {
+        selector.enabled = false;
+
+        // get ports list
+        if (this.portList == null) {
+            this.portList = ObjectList();
+            for (var i = 0; i < userObjectManager.getObjectNum(); i ++) {
+                var obj = userObjectManager.getObjectByIdx(i);
+                if (string.contains(obj.UserID, "AirPort_"))
+                    this.portList.Add(obj);
+            }
+		}
+		
+		// create particle
+		for (var i = 0; i < this.portList.Count; i ++) {
+    		var obj = this.portList.get_Item(i);
+    	
+    		var airCool = object.create("20170209143613393082209898");
+    		airCool.setPosition(obj.pos);
+    		this.parList.Add(airCool);
+    	}
+    }
+
+    // exit
+    function onleave() {
+        // remove particle objects
+    	for (var i = 0; i < this.parList.Count; i ++) {
+    		var obj = this.parList.get_Item(i);
+    		obj.destroy();
+    	}
+    	this.parList.Clear();
+    	
+        selector.enabled = true;
+    }
+}
+

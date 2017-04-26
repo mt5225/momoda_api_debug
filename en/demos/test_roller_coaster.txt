@@ -1,0 +1,34 @@
+//move camera along curve
+var vecArray = [Vector3(10,10,25), Vector3(0,0,50), Vector3(5,10,25)];
+
+// var vecArray = [];				
+var range = 5;
+for (var i = 0; i < 10; i++) {
+	array.add(vecArray,Vector3(Random.Range (-range, range), Random.Range (-range, range), Random.Range  (-range, range)));
+}
+
+var curveLine = object.createCurveLine(vecArray);
+curveLine.DynamicExtensionAnimSpeed = 10;
+curveLine.EnableDynamicExtensionAnim = true;
+//enable to allow camera move along curve
+curveLine.enableDynamicExtensionAnimPenAnchor = true;
+curveLine.StartDynamicExtensionAnim();
+
+curveLine.DynamicExtensionAnimProgressCallBack = function(prog){
+	if(prog!=1){		
+		camera.Flying = true;
+	}
+	else{
+		camera.Flying = false;
+	}	
+
+ 	var dir = curveLine.curAnimPenFaceDir;
+ 	//get viewpoint location
+	var pos = curveLine.animPen.transform.position;
+	// move backward 20 meters and up 10 meters
+	var eyePos = pos-dir*20+Vector3(0,10,0);
+	//set camera location
+	camera.transform.position = eyePos;
+	//ser viewpoint location
+	camera.target.transform.position =pos;
+}

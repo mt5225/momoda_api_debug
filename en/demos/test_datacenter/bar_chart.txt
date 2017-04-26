@@ -1,0 +1,73 @@
+// test_datacenter_bar_chart
+
+chartList = [];
+
+function create_bar_chart(pos, size, mat) {
+    var obj = object.create("B723E9E1B279467EBC9433D30D35F683");
+	array.add(chartList, obj);
+
+	// set object position
+    obj.pos = pos;
+
+    // set object scale
+    size.y = 0.02;
+    obj.setScale(size);
+
+    // set object texture
+    obj.setMaterial(mat);
+
+    // set scale animation
+    var toY = util.randomFloat(0.2, 2);
+   	obj.scaleTo({
+   		"y": toY,
+   		"easeType": "easeInQuad",
+   		"time": 0.5
+   	});
+}
+
+bar_chart_colors = [Color.blue, Color.cyan, Color.green, Color.red, Color.yellow];
+function show_bar_chart() {
+	destroy_bar_chart();
+
+	var pList = object.find("in_001").children;
+	
+	var objCount = pList.Count;
+	var completeCount = 0;
+	
+	for(var i = 0; i < objCount; i ++) {
+	    var p = pList.get_Item(i);
+
+	    var clr = bar_chart_colors[util.randomInt(0, bar_chart_colors.length)];
+	    clr.a = 0.8;
+	    var mat = util.createMaterial(clr);
+
+		create_bar_chart(p.pos, p.size, mat);
+
+	    // hide object
+	    p.show(false);
+	}
+}
+
+// delete bar chart
+function destroy_bar_chart() {
+	for(var i = 0; i < array.count(chartList); i ++)
+	    chartList[i].destroy();
+	array.clear( chartList );
+}
+
+// resume
+function recover_cabinent() {
+	destroy_bar_chart();
+	
+	var pList = object.find("in_001").children;
+	for(var i = 0; i < pList.get_Count(); i ++)
+	    pList.get_Item(i).show(true);
+}
+
+// assign random color to bar chart
+function random_bar_chart_color() {
+	for(var i = 0; i < array.count(chartList); i ++) {
+	    var p = chartList[i];
+	   	p.setColor(util.randomColor());
+	}
+}

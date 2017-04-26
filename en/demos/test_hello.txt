@@ -1,0 +1,17 @@
+
+// create object by id
+var obj = object.create("AB052B5B646E4A48B9C045096FF9B088");
+
+// up 5 meter
+obj.setPosition(0, 5, 0);
+
+// rotate 45 degrees
+obj.pitch(45);
+
+// add weight to object
+obj.addGravity(3);
+
+// move object to 5 meters high every 3 seconds
+util.setInterval(function() {
+	obj.setPosition(0, 5, 0);
+}, 3000);

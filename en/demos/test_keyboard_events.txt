@@ -1,0 +1,10 @@
+
+// press keyboard:  'n' to create new object
+
+util.addEventListener("keyup", function(event) {
+	if (event.key == KeyCode.N) {
+		var pos = Vector3(util.randomFloat(-10, 10), 3, util.randomFloat(-10, 10));
+		var obj = object.create("AB052B5B646E4A48B9C045096FF9B088", pos);
+    	obj.addGravity(1);
+	}
+});

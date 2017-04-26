@@ -1,0 +1,53 @@
+
+// ---------------------------------------------------
+// 模拟【推送】服务器数据
+// ！！！最终部署时，需要推送数据到后台，不需要下面这段代码
+util.setInterval(function() {
+	var v = util.randomInt(0, 10);
+	var c = util.randomDefaultColor();
+	server.sim.push({
+		"Obj01":{
+			"name":"larrow",
+			"value": v,
+			"color": [c.r, c.g, c.b]
+		}
+	});
+}, 3000);
+// ！！！最终部署后，请注释掉上面的代码
+// ---------------------------------------------------
+
+
+// 初始化
+function init(res) {
+	// 创建物体
+	var obj = object.create("AB052B5B646E4A48B9C045096FF9B088");
+	obj.uid = "Obj01";
+
+	// 创建界面
+	var ui = gui.create(res);
+	var offsetY = obj.size.y;
+	ui.setObject(obj, Vector3(0, offsetY, 0));
+	ui.setScale(0.3, 0.3);
+	ui.setText("Button/Text", i);
+	ui.regButtonEvent("Button", function() {
+		console.log("click button: " + obj.uid);
+	});
+
+	// 更新头顶牌子
+	util.setInterval(function() {
+		if (obj.data) {
+			ui.setText("Button/Text", obj.data["value"]);
+			if (obj.data["color"]) {
+				var arr = obj.data["color"]
+				var clr = Color(arr[0], arr[1], arr[2]);
+				obj.setColor(clr);
+			}
+		}
+	}, 3000);
+}
+
+// 第一个界面，跟踪前一半儿物体
+util.download({
+	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/balloon_button.bundle", 
+	"success": init
+});

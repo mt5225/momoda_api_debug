@@ -1,0 +1,36 @@
+// 创建一批箱子
+var objList = ObjectList();
+for (var x = -5; x < 5; x ++) {
+    for (var y = -5; y < 5; y ++) {
+        var obj = object.create("AB052B5B646E4A48B9C045096FF9B088", Vector3(x*2, 0, y*2));
+    	objList.Add(obj);
+    }
+}
+
+// 创建一个标记点
+var mark = object.create("899f3fa7205640fcb67af2c679bf8339");
+mark.setScale(0.2,0.2,0.2);
+
+// 单击左键事件
+var lastPickObj = null;
+util.addEventListener("click", function(btn) {
+	if (btn != 0)
+		return;
+
+	// 只拾取列表中的物体
+	var result = picking.raycast(objList);
+	if (result.picked) {
+		var obj = result.obj;
+
+		// 设置颜色
+		obj.setColor(Color.red);
+
+		// 移动标记位置到拾取的位置
+		mark.pos = result.point;
+
+		// 清空上一次是
+		if (lastPickObj != null && lastPickObj != obj)
+			lastPickObj.setColor(Color.white);
+		lastPickObj = obj;
+	}
+})

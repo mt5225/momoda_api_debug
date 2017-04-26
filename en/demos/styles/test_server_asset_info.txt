@@ -1,0 +1,39 @@
+
+// ---------------------------------------------------
+// 模拟【存储】服务器数据
+// ！！！最终部署时，需要存储数据到后台，不需要下面这段代码
+server.sim.set({
+	"Obj01":{
+		"name":"larrow",
+		"descript": "Developer"
+	}, 
+	"Obj02":{
+		"name":"chr",
+		"descript": "Art design"
+	}
+});
+// ！！！最终部署时，请注释掉上面的代码
+// ---------------------------------------------------
+
+
+// 初始化
+function init(res) {
+	// 创建物体
+	var obj01 = object.create("AB052B5B646E4A48B9C045096FF9B088");
+
+	// 创建界面
+	var ui = gui.create(res);
+	var offsetY = obj01.size.y;
+	ui.setObject(obj01, Vector3(0, offsetY, 0));
+	ui.setScale(0.3, 0.3);
+
+	server.get("Obj01", function(json) {
+		ui.setText("Button/Text", json["name"]);
+	});
+}
+
+// 第一个界面，跟踪前一半儿物体
+util.download({
+	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/message_button.bundle", 
+	"success": init
+});

@@ -1,0 +1,38 @@
+
+// create the earch
+var earth = object.create("9f5681fe55674ce9b617f9fa23d9729b", Vec3(0, 5, 0));
+
+// create the moon
+var moon = object.create("9f5681fe55674ce9b617f9fa23d9729b");
+moon.parent = earth;
+moon.setPosition(earth.pos + Vec3(4, 0, 0));
+moon.setScale(Vec3.one*0.32);
+moon.addTail(0.08, 0, Color.red, 2.0);
+
+// create satellite
+var satellite = object.create("a6bbe77854f44414ac6facc88ac406b1");
+satellite.parent = moon;
+satellite.setPosition(moon.pos + Vec3(0, 1.5, 0));
+satellite.setScale(Vec3.one*0.001);
+satellite.addTail(0.05, 0, Color.blue, 2.0);
+
+// update in every frame
+util.setRenderCallback(function(){
+    earth.yaw(1.5);
+    moon.roll(2);
+});
+
+// modify texture
+var url = "http://www.3dmomoda.com/mmdclient/script/examples/demos/earth_moon.zip"
+util.downloadTextures({
+    "url": url, 
+    "success": function(textures) {
+    	// texture for the earth
+    	var earthMat = util.createMaterial(textures["Earth.jpg"]);
+    	earth.setMaterial(earthMat);
+
+    	// texture for the moon
+    	var moonMat = util.createMaterial(textures["Moon.jpg"]);
+    	moon.setMaterial(moonMat);
+    }
+});

@@ -1,0 +1,22 @@
+
+// create object
+var obj = object.create("81807868C78141BFB2E93275AC3ABB39");
+
+// define moving method
+function move_to_next() {
+
+	obj.moveTo({
+		"pos": util.randomVector3Around(obj, 10, 0, 10), // random position
+		"delay": 0.5, // delay 0.5 sec
+		"orientToPath": true, // move along the path
+		"easeType": "easeInOutExpo",
+		"speed": 5, // moving speed in meters per second
+		"complete":function() {
+			move_to_next(); // move to next point
+		}
+	});
+
+}
+
+// start
+move_to_next();

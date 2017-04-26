@@ -1,0 +1,154 @@
+var elevatorName = "A001";
+function play_anim( animState,objName) {
+	if (objName == null)
+		objName = elevatorName;
+	var animName = "Auto_Open";
+	if (!animState)
+		animName = "Auto_Close";
+
+	var bo = object.find(objName);
+	bo.playAnim(animName);
+
+	var outDoor;// door animation
+	var floorDoorList = elevatorDoorManager[bo.uid];
+	for ( var i = 0 ; i < floorDoorList.length;i++ ) { //get door object
+		if ( bo.parent == floorDoorList[i].parent) {
+			outDoor = floorDoorList[i];
+		}
+	}
+	if (outDoor == null)
+		return;
+	if (animState)
+		outDoor.Open();
+	else
+		outDoor.Close();
+}
+
+// get all doors and elevator
+var elevatorManager = {};
+var elevatorDoorManager = {};
+function init_elevators() {
+	var objList = object.findByProperty("objectType");
+	for (var i =0 ; i < objList.Count; i++) {
+		var obj = objList.get_Item(i);
+		var propValue = obj.getProperty("objectType");
+		if (propValue == "elevator")
+			elevatorManager[obj.uid] = obj;
+		else if (propValue == "elevatorDoor" && obj.hasProperty("parent")) {
+			var pid = obj.getProperty("parent");
+			if (elevatorDoorManager[pid] == null)
+				elevatorDoorManager[pid] = [];
+			array.add(elevatorDoorManager[pid], obj);
+		}
+	}
+}
+init_elevators();
+
+// move to target story
+var floorCount = 0;
+function goto_the_floor(floorNumber) {
+	var curElevatorName = elevatorName;
+	var targetNumber = tonumber(floorNumber);
+	var bo = object.find(curElevatorName);
+	var pos = bo.getPosition();
+	var curElrNumber = 0;
+	var target;
+	play_anim(false);
+	for ( var i = 0; i < Building.current.planList.Count; i++ ) {
+		var currentFloor = Building.current.planList.get_Item(i);
+		if ( currentFloor == bo.parent )
+			curElrNumber = i;
+		if (targetNumber == i )
+			target = currentFloor;
+	}
+	pos.y = target.getPosition().y;
+	var timeStep = 1;
+	if (Building.current.IsExpanded)
+		timeStep = 4;		
+	bo.moveTo({
+		"pos":pos,
+		"orientToPath":false,
+		"speed":timeStep,
+		"easeType": "easeInOutCubic",
+		"oncomplete":function() {
+			bo.parent = target;
+			play_anim(true,curElevatorName);
+		}
+	});
+}
+function get_last_floor_number() {
+	var firstFloorCount = 0;
+	var firstFloor = elevatorDoorManager[elevatorName][0];
+	for ( var i = 0; i < Building.current.planList.Count; i++ ) {
+		var currentFloor = Building.current.planList.get_Item(i);
+		if ( currentFloor == firstFloor.parent )
+			firstFloorCount = i;
+	}
+	return firstFloorCount;
+}
+
+// slidebar
+var lastFloor = 0;
+var elevatorCount = 0;
+var sliderFloor;
+var labelFloorNumber;
+var elevatorLabel;
+function InitUI() {
+	elevatorLabel = gui.createLabel("elevator:", Rect(90, 100, 200, 20));
+
+	// create story sign
+	labelFloorNumber = gui.createLabel("1", Rect(100, 180, 200, 20));
+	sliderFloor = gui.createSlider(Rect(100, 210, 200, 20), 1, 1, 4, function(v){
+		lastFloor = toint(v - 1);
+		labelFloorNumber.text = "" +  toint(v);
+	});
+
+	foreach( pair in pairs(elevatorManager) ){
+		var curElevatorName = pair.key;
+		//flash elevator
+		elevatorManager[curElevatorName].setColorFlash(true, Color.blue);
+		//open elevator by default
+		play_anim(true,curElevatorName);
+		//iterate all elevators
+		// init elevator
+	    if (elevatorCount == 0) {
+	    	elevatorName = curElevatorName;
+	   		var curNumber = get_last_floor_number();
+			elevatorLabel.text = "elevator:" + curElevatorName +" total" + elevatorDoorManager[curElevatorName].length + "stories";
+			sliderFloor.cur = curNumber + 1;
+		    sliderFloor.min = curNumber + 1;
+		    sliderFloor.max = curNumber + elevatorDoorManager[curElevatorName].length;
+		    labelFloorNumber.text =""+ toint (curNumber + 1);
+		    lastFloor = curNumber;
+	    }
+	    //create button for each elevator
+		gui.createButton(curElevatorName, Rect(100 + 70 * elevatorCount, 130, 70, 30), function() {
+			elevatorName = curElevatorName;
+			//print(elevatorName);
+			var curNumber = get_last_floor_number();
+			elevatorLabel.text = "elevator:" + curElevatorName +" total" + elevatorDoorManager[curElevatorName].length + "stories";
+			sliderFloor.cur = curNumber + 1;
+			sliderFloor.min = curNumber + 1;
+			sliderFloor.max = curNumber + elevatorDoorManager[curElevatorName].length;
+			labelFloorNumber.text =""+ toint (curNumber + 1);
+			lastFloor = curNumber;
+		});
+		elevatorCount++;
+	}
+
+	gui.createButton("Start", Rect(100, 240, 200, 50), function() {
+		goto_the_floor(lastFloor);
+	});
+}
+//create object by id
+if( world.buildingList.Count > 0 ) {
+	var building = world.buildingList.get_Item(0);
+
+	util.setTimeout(function(){
+		level.change(building);
+		// test set building transparent
+		var cmdJson = json.encode({"cmd":"SetBuildingTransparent","id":building.ID,"trans":0.3});
+		commandManager.RunJson(cmdJson,true);
+		InitUI();
+	}, 1000);	
+}

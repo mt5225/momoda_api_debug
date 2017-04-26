@@ -1,0 +1,351 @@
+﻿var objList = ObjectList();
+var parentList = ObjectList();
+var Step_r = 10;
+var type_f=1;
+var moveGoon=false;
+var G_move=false;
+RotateObject = {
+    someMember = null,
+	speed = 1,
+    function Start() {
+    }
+    function Update() {
+		this.transform.Rotate(Vector3.up,(1*this.speed))
+    }
+}
+var mmdpath = Vector3List();
+var obj_mmd = object.create("6ddaaf87156c4e248d48b3b1c2f97309",function(){
+	var mf= obj_mmd.gameObject.GetComponentsInChildren(MeshFilter);
+
+	for(var i = 0; i < mf.Length; i ++) {
+		var child = (mf.GetValue (i)).mesh.vertices;
+			if (mf.GetValue (i).name!="DumpObject" ){
+				for(var j = 0; j < child.Length; j ++) {
+					mmdpath.Add ((child.GetValue (j)));	
+				}
+			}
+	}
+	obj_mmd.destroy();
+}); 
+var t_order=1;
+for (var i = -90; i < 90; i += Step_r) {	
+		var path = Vector3List();
+		var obj_p = object.create("6cc785ba01de48e9a0b96d322115dad3");
+		obj_p.pitch(180*(util.randomInt (0,1)) );
+		parentList.Add(obj_p);
+		var rr=(util.addObjectScript(obj_p, RotateObject,"ss"));
+		//rr.speed=util.randomFloat (0.2,  1);
+	    for (var j = 0; j < 360; j += Step_r) {
+	        var obj = object.create("5037d693f41e4090be685e30bca03220");
+			var rr=(util.addObjectScript(obj, RotateObject,"ss"));
+			var cr=(Mathf.Abs(t_order/648-0.5))*3-0.25;
+			var cb=(0.5-Mathf.Abs(0.5-t_order/648))*3-0.25;
+			var clr=(Color (cr, cb, 0, 1.0 ));
+	 		var x = Step_r * Mathf.Cos(i * Mathf.Deg2Rad) * Mathf.Sin(j* Mathf.Deg2Rad);
+	 		var y = Step_r * Mathf.Sin(i * Mathf.Deg2Rad) + Step_r * 1.5;
+	 		var z = Step_r * Mathf.Cos(i * Mathf.Deg2Rad) * Mathf.Cos(j* Mathf.Deg2Rad);
+            objList.Add(obj);
+			var id = util.setTimeout(function() {
+				//obj.setColor (clr);
+				obj.setPosition	(x, y, z); 
+				obj.transform.parent=obj_p.transform;
+            }, (t_order*5));
+			var mat = Material(Shader.Find("Particles/Additive"));
+			mat.SetColor("_TintColor",clr) ;
+			obj.addTail({
+					"startWidth":0.05 ,
+					"endWidth":0,
+					"time": 2,
+					"material":mat
+				});	
+            ++t_order;
+	    }
+	}
+var objcount =(objList.Count);
+
+function addRotate() {
+		for (var i = 0; i < parentList.Count; ++i ) {
+		var obj_p=parentList.get_Item(i);
+		var rr=util.addObjectScript(obj_p, RotateObject,"ss");
+		rr.speed=util.randomFloat (0.2,  1);	
+	}
+}
+function removeRotate() {
+	for (var i = 0; i < parentList.Count; ++i ) {
+		var obj_p=parentList.get_Item(i);
+		var rr=util.removeObjectScript(obj_p,"ss");
+	}
+}
+function move_to_sphere(f1,f2) {
+		t_order=0;
+		type_f=1;
+		for (var i = -90; i < 90; i += Step_r) {
+			for (var j = 0; j < 360; j += Step_r) {
+				var obj=objList.get_Item(t_order);		
+					var x = Step_r * Mathf.Cos(i * Mathf.Deg2Rad) * Mathf.Sin(j* Mathf.Deg2Rad);
+					var y = Step_r * Mathf.Sin(i * Mathf.Deg2Rad) + Step_r * 1.5;
+					var z = Step_r * Mathf.Cos(i * Mathf.Deg2Rad) * Mathf.Cos(j* Mathf.Deg2Rad);
+				var t1=3;
+				var real_i=((t_order+1)== (objList.Count-0));
+				if (f1==1 ){
+					t1=util.randomFloat(1,4);
+					}
+				var id = util.setTimeout(function() {
+				obj.moveTo({
+					"pos":Vector3 (x, y, z),
+					"orientToPath":false,
+					"time":t1,
+					"easeType": "easeInOutCubic",
+					"complete":function() {
+									if (real_i && moveGoon) {
+									nextfx(f1,f2);							
+									}
+						}
+				}); 
+			}, (t_order*5*f2));
+				++t_order;
+	    }
+	}
+}
+function move_to_point(f1,f2) {
+	type_f=3;
+	for (var i = 0; i < objList.Count; ++i ) {
+		var obj=objList.get_Item(i);
+		var t1=3;
+		var real_i=((i+1) == objList.Count);
+		if (f1==1 ){
+			t1=util.randomFloat(1,4);
+			}
+		var id = util.setTimeout(function() {
+		obj.moveTo({
+			"pos":Vector3 (0,15,0),
+			"orientToPath":false,
+			"time":t1,
+			"easeType": "easeInOutCubic",
+			"complete":function() {
+							if (real_i && moveGoon) {
+							
+							nextfx(f1,f2);							
+							}
+				}
+		}); 
+		 }, (i*5*f2));
+	}     
+}
+function move_to_ring(f1,f2) {
+	type_f=2;
+		for (var i = 0; i < objList.Count; ++i ) {
+		var obj=objList.get_Item(i);
+		var j=(i/objcount*360);
+		var t1=3;
+		if (f1==1 ){
+			t1=util.randomFloat(1,4);
+			}
+			var real_i=((i+1) == objList.Count);
+			var id = util.setTimeout(function() {
+			obj.moveTo({
+				"pos":Vector3 (Mathf.Cos(j* Mathf.Deg2Rad)*20,5,Mathf.Sin(j* Mathf.Deg2Rad)*20),
+				"orientToPath":false,
+				"time":t1,
+				"easeType": "easeInOutCubic",
+				"complete":function() {
+							if (real_i && moveGoon) {
+							nextfx(f1,f2);							
+							}
+				}
+			}); 
+			}, (i*5*f2));			
+		}
+}
+function move_to_Helical(f1,f2) {
+	type_f=4;
+		for (var i = 0; i < objList.Count; ++i ) {
+			var obj=objList.get_Item(i);
+			var j=((i+1)/objcount*3600);
+		var t1=3;
+		if (f1==1 ){
+			t1=util.randomFloat(1,4);
+			}
+			var real_i=((i+1) == objList.Count);
+			var id = util.setTimeout(function() {
+			obj.moveTo({
+				"pos":Vector3 (Mathf.Cos(j* Mathf.Deg2Rad)*5,(Mathf.Sqrt (j)/3),(Mathf.Sin(j* Mathf.Deg2Rad)*5)),
+				"orientToPath":false,
+				"time":t1,
+				"easeType": "easeInOutCubic",
+				"complete":function() {
+							if (real_i && moveGoon) {
+							nextfx(f1,f2);							
+							}
+				}
+			}); 
+			}, (i*5*f2));
+		}		
+}
+function move_to_disc(f1,f2) {
+		type_f=5;
+		t_order=0;
+		for (var i = -90; i < 90; i += Step_r) {
+			for (var j = 0; j < 360; j += Step_r) {
+			var obj=objList.get_Item(t_order);		
+				var x = Step_r * Mathf.Cos(i * Mathf.Deg2Rad) * Mathf.Sin(j* Mathf.Deg2Rad);
+				var y = Step_r * Mathf.Sin(i * Mathf.Deg2Rad) ;
+				var z = Step_r * Mathf.Cos(i * Mathf.Deg2Rad) * Mathf.Cos(j* Mathf.Deg2Rad);
+		var t1=3;
+		var real_i=((t_order+1) == objList.Count);
+		if (f1==1 ){
+			t1=util.randomFloat(1,4);
+			}
+			var id = util.setTimeout(function() {
+			obj.moveTo({
+				"pos":Vector3 (x, Mathf.Abs(Mathf.Abs(y/4)-5)+10, z),
+				"orientToPath":false,
+				"time":t1,
+				"easeType": "easeInOutCubic",
+				"complete":function() {
+							if (real_i && moveGoon) {
+							nextfx(f1,f2);							
+							}
+				}
+			}); 
+			}, (t_order*5*f2));
+				++t_order;
+			}
+		}	
+}
+function move_path_MMD(f1,f2) {
+	removeRotate();
+	type_f=6;
+		for (var i = 0; i < objList.Count; ++i ) {
+			var obj=objList.get_Item(i);
+			var j=Mathf.Floor(i/(objList.Count-1)*(mmdpath.Count-1));
+		var t1=3;
+		if (f1==1 ){
+			t1=util.randomFloat(1,4);
+			}
+			var real_i=((i+1) == objList.Count);
+			var id = util.setTimeout(function() {
+			obj.moveTo({
+				"pos": mmdpath.get_Item(j)+(Vector3(0,10,0)),
+				"orientToPath":false,
+				"time":t1,
+				"easeType": "easeInOutCubic",
+				"complete":function() {
+							if (real_i && moveGoon) {
+							nextfx(f1,f2);							
+							}
+				}
+			}); 
+			}, (i*5*f2));
+		}
+	//addRotate();		
+}
+function move_to_G() {
+		for (var i = 0; i < objList.Count; ++i ) {
+			var obj=objList.get_Item(i);
+			obj.addGravity(30);      
+		}	
+}
+function remove_to_G() {
+		for (var i = 0; i < objList.Count; ++i ) {
+			var obj=objList.get_Item(i);
+			obj.stopMoving();
+			obj.removeGravity();      
+		}	
+}
+function nextfx(f1,f2) {
+	var c = util.randomInt(1,6);
+	while (c == type_f ){
+		c = util.randomInt(1,6);	
+	}
+    switch (c) {
+        case 1:
+			move_to_sphere(f1,f2);
+			break;
+        case 2:
+            move_to_ring(f1,f2);
+            break;
+		case 3:
+            move_to_point(f1,f2);
+            break;
+		case 4:
+            move_to_Helical (f1,f2);
+            break;
+		case 5:
+            move_to_disc(f1,f2);
+            break;
+		case 6:
+            move_path_MMD(f1,f2);
+            break;
+	     default:
+            break;
+	}
+}
+gui.createButton("Cycle", Rect(20, 100, 80, 20), function() {
+	move_to_ring(0,0) ;
+});
+gui.createButton("Sphere", Rect(20, 120, 80, 20), function() {
+move_to_sphere(0,0);
+});
+gui.createButton("Point", Rect(20, 140, 80, 20), function() {
+	move_to_point(0,0);
+});
+gui.createButton("Helix", Rect(20, 160, 80, 20), function() {
+	move_to_Helical (0,0);
+});
+gui.createButton("Disk", Rect(20, 180, 80, 20), function() {
+	move_to_disc(0,0);
+});
+gui.createButton("Momoda", Rect(20, 200, 80, 20), function() {
+	
+move_path_MMD(0,0);
+});
+gui.createButton("Free Style", Rect((Screen.width-100), 100, 80, 20), function() {
+	G_move=true;
+	move_to_G();
+});
+gui.createButton("Conservative", Rect((Screen.width-100), 120, 80, 20), function() {
+	if(G_move)
+	remove_to_G();
+});
+gui.createButton("Rotate",Rect( (Screen.width-100), 160, 80, 20), function() {
+	addRotate();
+	/*
+		for (var i = 0; i < parentList.Count; ++i ) {
+		var obj_p=parentList.get_Item(i);
+		var rr=util.addObjectScript(obj_p, RotateObject,"ss");
+		rr.speed=util.randomFloat (0.2,  1);	
+	}
+	*/
+});
+gui.createButton("Stop",Rect( (Screen.width-100), 180, 80, 20), function() {
+	moveGoon=false;
+	removeRotate();
+	/*
+	for (var i = 0; i < parentList.Count; ++i ) {
+		var obj_p=parentList.get_Item(i);
+		var rr=util.removeObjectScript(obj_p,"ss");
+	}
+	*/	
+});
+gui.createButton("All", Rect(20, (Screen.height-200), 80, 20), function() {
+	nextfx(0,0);
+});
+gui.createButton("Random", Rect(20, (Screen.height-160), 80, 20), function() {
+	nextfx(1,0);
+});
+gui.createButton("In-turns", Rect(20, (Screen.height-120), 80, 20), function() {
+	nextfx(0,1);
+});
+gui.createButton("Animation1", Rect(100, (Screen.height-200), 80, 20), function() {
+	moveGoon=true;
+	nextfx(0,0);
+});
+gui.createButton("Animation2", Rect(100, (Screen.height-160), 80, 20), function() {
+	moveGoon=true;
+	nextfx(1,0);
+});
+gui.createButton("Animation3", Rect(100, (Screen.height-120), 80, 20), function() {
+	moveGoon=true;
+	nextfx(0,1);
+});

@@ -1,0 +1,172 @@
+
+// ---------------------------------------------------------
+// Drag Objct Around，Supports multi-selection：
+// mouse click: select object；
+// mouse click and move: move object;
+// mouse click and move + shift: lift object; 
+// mouse click and move + ctrl: rotate object; 
+// ---------------------------------------------------------
+
+// create boxes
+for (var x = -4; x < 4; x ++) {
+    for (var y = -4; y < 4; y ++) {
+        var obj = object.create("AB052B5B646E4A48B9C045096FF9B088", Vector3(x*2, 0.2, y*2));
+
+        // add to selection candidate set
+        selector.AddCandidate(obj);
+    }
+}
+
+// ---------------------------------------------------------
+// drag objecct 
+dragObjState = {
+
+    // drag target
+    dragObj: null,
+
+    // save last mouse position 
+    lastPoint: Vector2.zero,
+
+    // start point 
+    startPos: Vector3.zero,
+
+    // rotation center
+    rotCenter: Vector3.zero,
+
+    // move target 
+    function pan() {
+        // get horizontal plane 
+        var plane = Plane(Vector3.up, this.dragObj.pos)
+        var result = picking.raycast( plane );
+        if (!result.picked)
+            return;
+
+        // set position 
+        var delta = result.point - this.startPos;
+        for(var i = 0; i < selector.SelectedList.Count; i ++) {
+            var obj = selector.SelectedList.get_Item(i);
+            var newPos = obj.initPos + delta;
+            obj.setPositionXZ(newPos.x, newPos.z);
+        }
+    }
+
+    // lift object
+    function lift() {
+        //   get vertical plane 
+        var plane = Plane(camera.backward, this.dragObj.pos);
+        var result = picking.raycast( plane ); 
+        if (!result.picked)
+            return;
+
+        // set position
+        var delta = result.point - this.startPos;
+        for(var i = 0; i < selector.SelectedList.Count; i ++) {
+            var obj = selector.SelectedList.get_Item(i);
+            var newPos = obj.initPos + delta;
+            obj.setPositionY(newPos.y);
+        }
+    }
+    
+    // Rotate 
+    function rotate(ox, oy) {
+        var y = Math.Abs(ox) > Math.Abs(oy) ? -ox : oy; 
+
+        var angle = 15 * y * Time.deltaTime;
+        for(var i = 0; i < selector.SelectedList.Count; i ++) {
+            var obj = selector.SelectedList.get_Item(i);
+            obj.rotateAround(this.rotCenter, Vector3.up, angle);
+        }
+    }
+
+    // enter dragging mode 
+    function ondragstart(event) {
+        if (event.obj == null || !event.obj.selected)
+            return;
+
+        this.dragObj = event.obj;
+
+        // save selected objects position and calculate center
+        this.rotCenter = Vector3.zero;
+        for(var i = 0; i < selector.SelectedList.Count; i ++) {
+            var obj = selector.SelectedList.get_Item(i);
+            obj.holdPos();
+            this.rotCenter = this.rotCenter + obj.pos;
+        }
+        this.rotCenter = this.rotCenter / selector.SelectedList.Count;
+
+        // save start position
+        var plane = Plane(Vector3.up, this.dragObj.pos);
+        var result = picking.raycast( plane ); // 
+        if (result.picked)
+            this.startPos = result.point;
+
+        // save screen postion 
+        this.lastPoint = Vector2(event.x, event.y);
+
+        // turn off camera control
+        camera.setCtrlEnabled(false);
+    }
+    
+    // dragging
+    function ondrag(event) {
+        if (!this.dragObj)
+            return;
+
+        if (event.button == 0) {
+            // lift
+            if (event.shiftKey)
+                this.lift();
+            // rotate 
+            else if (event.ctrlKey)
+                this.rotate( event.x - this.lastPoint.x, event.y - this.lastPoint.y);
+            // move
+            else
+                this.pan();
+        }
+
+        this.lastPoint = Vector2(event.x, event.y);
+    }
+
+    // exit dragging
+    function ondragend(event) {
+        if (this.dragObj) {
+            camera.setCtrlEnabled(true);
+            this.dragObj = null;
+        }
+    }
+
+}
+
+// ---------------------------------------------------------
+// status object
+state = {
+    current : null,
+    
+    function handleEvent(event) {
+        if (!this.current)    
+            return;
+            
+        // handle event
+        var funcName = "on" + event.type;
+        if (this.current[funcName])
+            this.current[funcName](event);
+    }
+}
+state.current = dragObjState;
+
+// ---------------------------------------------------------
+// register event
+
+// dragging event
+util.addEventListener("dragstart", function(event) {
+    state.handleEvent(event);
+});
+
+util.addEventListener("drag", function(event) {
+    state.handleEvent(event);
+});
+
+util.addEventListener("dragend", function(event) {
+    state.handleEvent(event);
+});
+

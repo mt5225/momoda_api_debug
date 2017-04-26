@@ -1,0 +1,58 @@
+
+//  Create GUI
+
+var x = Screen.width * 0.5;
+var y = Screen.height * 0.5;
+
+// create button
+gui.createButton("upper-left", Rect(100, 100, 200, 50), function() {
+    box.text = "Clicked the upper-left button";
+});
+
+
+// create rectangle area 
+var box = gui.createBox("center", Rect(x-150, 80, 300, 100));
+
+
+gui.createButton("lower-right", Rect(Screen.width-300, Screen.height-300, 200, 50), function() {
+    box.text = "Clicked the lower-right button";
+});
+
+// create sign
+gui.createLabel("sign", Rect(100, 200, 200, 20));
+
+// create input box
+var textField = gui.createTextField("input text", Rect(100, 230, 200, 20), function(str) {
+	print("typing ... : "+str);
+});
+
+// create MsgBox
+gui.createButton("Show MsgBox", Rect(100, 260, 200, 20), function() {
+	var str = textField.text;
+    var msgBox = gui.createMsgBox("Message", str, Rect(x-150, y-25, 400, 200), function(){ 
+		print("ok");
+		msgBox.close = true;
+	}, function() { 
+		print("cancel");
+		msgBox.close = true; 
+	});
+});
+
+// create Toggle
+gui.createToggle(true, "toggle", Rect(100, 290, 200, 30), function(toggle) {
+	print("toggle" + toggle);
+})
+
+// slidebar
+var lastW=0;
+gui.createSlider(Rect(100, 320, 200, 10), 20, 0, 100, function(v){ 
+	box.rect.width = (lastW > v) ? box.rect.width - v : box.rect.width + v;
+	lastW = v;
+});
+
+var lastH=0;
+gui.createSlider(Rect(100, 340, 10, 200), 50, 0, 100, function(v){ 
+	box.rect.height = (lastH> v) ? box.rect.height - v : box.rect.height + v;
+	lastH = v;
+});
+

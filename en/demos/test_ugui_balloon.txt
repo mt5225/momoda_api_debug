@@ -1,0 +1,32 @@
+
+// ---------------------------------------------------------
+// create sign with custom text, color, register event, show/hide, etc.
+// ---------------------------------------------------------
+
+var ui = null;
+function init_balloon(res) {
+	ui = gui.create(res);
+
+	ui.trackPos(0, 2, 0);
+	ui.setScale(0.3, 0.3);
+	ui.setText("Button/Text", "Hello!");
+
+	ui.setImageColor("Button", Color.red);
+	ui.setTextColor("Button/Text", Color.yellow);
+
+	ui.regButtonEvent("Button", function() {
+		console.log("click ui button");
+	});
+};
+
+util.download({
+	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/message_button.bundle", 
+	"success": init_balloon
+});
+
+// test show/hide
+// util.setInterval(function(){
+// 	if (ui != null) {
+// 		ui.show(!ui.isShow);
+// 	}
+// }, 1000);

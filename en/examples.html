@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+<head>
+    <title>MMDAPI2.0</title>
+    <meta charset="utf-8" />
+    <link type="text/css" rel="stylesheet" href="assets/plugin/jquery/css/layout-default-latest.css" />
+	<link rel="stylesheet" type="text/css" href="assets/plugin/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="assets/plugin/jquery/js/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/plugin/jquery/js/jquery-ui-latest.js"></script>
+    <script type="text/javascript" src="assets/plugin/jquery/js/jquery.layout-latest.js"></script>
+    <script type="text/javascript" src="assets/plugin/ace-builds/src-noconflict/ace.js"></script>
+    <script type="text/javascript" src="javascripts/ubundle.js"></script>
+    <script type="text/javascript" src="javascripts/UnityObject2.js"></script>
+    <script type="text/javascript" src="javascripts/umodel.js"></script>
+    <script type="text/javascript" src="demos/demos.js"></script>
+	<script type="text/javascript" src="javascripts/editor.js"></script>
+    <style> 
+        ul.tabs {
+            list-style: none;
+            margin: 0 0 -1px 0;
+            padding: 0 0 0 37px;
+            font-family: "Ubuntu Mono";
+            overflow: hidden;
+            width: 2000px;
+        }
+        ul.tabs li {
+            font-size: 11pt;
+            color: #777;
+            cursor: pointer;
+            margin: 0 2px 0 0;
+            padding: 2px 10px 5px;
+            border: 1px solid silver;
+            border-bottom-width: 0px;
+            background: #f3f3f3;
+            display: inline-block;
+            z-index: 1;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            position: relative;
+        }
+        ul.tabs li:hover {
+            color: #444;
+        }
+        ul.tabs li.selected {
+            background: white;
+            color: #222;
+            z-index: 3;
+            cursor: default;
+        }
+        ul.tabs li:before,
+        ul.tabs li:after {
+            position: absolute;
+            bottom: 0;
+            width: 6px;
+            height: 6px;
+            content: " ";
+            border: 1px solid silver;
+        }
+        ul.tabs li:before {
+            left: -7px;
+            border-bottom-right-radius: 6px;
+            border-width: 0 1px 1px 0;
+            box-shadow: 2px 2px 0 #f3f3f3;
+        }
+        ul.tabs li:after {
+            right: -7px;
+            border-bottom-left-radius: 6px;
+            border-width: 0 0 1px 1px;
+            box-shadow: -2px 2px 0 #f3f3f3;
+        }
+        ul.tabs li.selected:before {
+            box-shadow: 2px 2px 0 white;
+        }
+        ul.tabs li.selected:after {
+            box-shadow: -2px 2px 0 white;
+        }
+
+		.one-line{
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		.multi-line{
+			overflow : hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			word-break: break-word;
+		}
+
+		::-webkit-scrollbar-track-piece:vertical {
+			-webkit-border-radius: 2px;
+			background-color:#ddd;
+		}
+
+		::-webkit-scrollbar {
+			width: 10px;
+			height: 10px;
+		}
+
+		::-webkit-scrollbar-thumb:vertical
+		{
+			height: 50px;
+			background-color: #ccc;
+			-webkit-border-radius: 2px;
+		}
+
+		::-webkit-scrollbar-thumb:vertical:hover {
+			height: 50px;
+			background-color: #878585;
+			-webkit-border-radius: 6px;
+		}
+
+		::-webkit-scrollbar-corner{
+			height: 10px;
+			background-color: #ECECEC;
+		}
+
+		/*override*/
+		.panel-default > .panel-heading{
+			background-color: #ccc;
+		}
+
+    </style>
+</head>
+<body>
+	<div class="ui-layout-west" style="font-size:14px;">
+		<img class="img-responsive" src="./images/log_transparent.png" width="90px"/>
+		<span style="color: rgb(107,107,107); font-size: 18px;">API Debug</span>
+		<span id="version"></span>
+        <input type="text" id="sceneId" placeholder="sceneId" style="margin-top: 10px; margin-bottom: 10px;" class="form-control"/>
+		<div class="row">
+			<input style="font-size:9pt" type="button" class="btn col-md-offset-1 col-md-3" value="New" onclick="momoda.local.page.createNew();">
+			<input style="font-size:9pt" type="button" class="btn col-md-3" value="Change" onclick="momoda.local.page.switchScene();">
+			<input style="font-size:9pt"  type="button" class="btn col-md-3" value="Document" onclick="momoda.local.page.openDocument();">
+			<!--<input type="button" value="快捷键" onclick="momoda.local.page.showShortcut();">-->
+		</div>
+		<input type="text" id="search" placeholder="Search" style="margin-top: 10px; margin-bottom: 10px;" class="form-control"/>
+		<div id="contents">
+			<!--<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">-->
+				<!--<div class="panel panel-default">-->
+					<!--<div class="panel-heading" role="tab" id="headingOne">-->
+						<!--<h4 class="panel-title">-->
+							<!--<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">-->
+								<!--Collapsible Group Item #1-->
+							<!--</a>-->
+						<!--</h4>-->
+					<!--</div>-->
+					<!--<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">-->
+						<!--<div class="panel-body">-->
+							<!--Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+		</div>
+	</div>
+
+	<div class="ui-layout-center" id="center" style="position:relative; font-size:14px; overflow-x: hidden" >
+        <ul class="tabs" id="docs">
+            <a id="addFile" class="btn btn-primary" href="javascript:void(0);">+</a>
+        </ul>
+        <pre id="editor" style=" margin: 0; position: absolute; top: 40px; bottom: 60px; left: 0; right: 0;"></pre>
+		<hr/>
+		<div style=" position:absolute; width:100%; bottom:0px; height:50px ; background:#fff; text-align:center;" id="btnBox">
+			<button class="btn btn-primary" onclick="momoda.local.page.executeCode();">Execute</button>
+			<button class="btn" onclick="momoda.local.page.resetting();">Reset scene</button>
+		</div>
+	</div>
+
+	<div class="ui-layout-east ui-layout-pane ui-layout-pane-east" >
+		<div class="3D" id="3D" style="width: 100%; height: 100%;">
+			<div class="content">
+				<div id="unityPlayer" style="width:500; height:800;">
+					<div class="missing" >
+						<a href="http://3dmomoda.oss-cn-beijing.aliyuncs.com/common/UnityWebPlayerFull-5.3.4f1.exe" title="开始安装插件!" style="display: none"> 插件window下载地址 </a>
+						</br>
+						<a href="http://3dmomoda.oss-cn-beijing.aliyuncs.com/common/webplayer-x86_64-5.3.4f1.dmg" title="开始安装插件!" style="display: none"> 插件MacOS下载地址  </a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var myLayout;
+		$(document).ready(function() {
+			myLayout = $('body').layout({
+				closable : true, // pane can open & close
+				resizable : true, // when open, pane can be resized 
+				slidable : false, // when closed, pane can 'slide' open over other panes - closes on mouse-out
+				livePaneResizing : false, //	some resizing/toggling settings
+				
+				north__resizable : false,
+				north__closable : false,
+				east__size : .5,
+				east__minSize : 600,
+				east__resizable : true,
+				east__maxSize : .8, // 80% of layout width
+			    east__spacing_open: 11,
+                east__spacing_closed: 11,
+				west__size : .14,
+				west__spacing_open : 11,
+				west__spacing_closed : 11,
+				south__size : .15,
+				onresize: onresize
+			});
+		});
+
+		function onresize(param){
+			uModel.resize($("#3D").width(),$(window).height() - 20);
+			resizeEditor();
+		}
+
+		function checkPlugins() {
+			var np = navigator.plugins;
+			if (window.ActiveXObject) {
+				var pluginName = "UnityWebPlayer";
+				var activexObjectName = pluginName + "." + pluginName;
+				try {
+					var axobj = eval("new ActiveXObject(activexObjectName);");
+					// 将对象转化为布尔类型
+					return axobj ? true : false;
+				} catch (e) {
+					return false;
+				}
+			} else if (np && np.length) {
+				// 非IE
+                var pluginName = "Unity Player"
+				for ( var i = 0; i < np.length; i++) {
+					if (np[i].name.toLowerCase().indexOf(pluginName.toLowerCase()) != -1)
+						return true;
+				}
+				return false;
+			} else {
+				// 其他则返回false
+				return false;
+			}
+		}
+
+		jQuery(function() {
+			momoda.local.page.showCmds();
+			//momoda.local.scene.init();
+            $("#version").text("" + scriptVersion);
+			if(!checkPlugins()){
+				$("#unityPlayer a").css({display: "block"});
+			}
+		});
+
+		// 加载场景后执行的方法，mmd提供的内部方法
+		uModel.OnLoadComplete = function() {
+			uModel.RunCommand(JSON.stringify(momoda.local.scene.cmds), true);
+		};
+
+		$("input").keydown(function(event){
+			if(event.keyCode==13){
+				momoda.local.page.queryExample();
+			}
+		});
+		
+		$(window).resize(function() {
+			onresize();
+			//uModel.resize($("#3D").width() - 20,$(window).height() - 20);
+		});
+
+		$(document).on("keydown", false, function(event){
+			if (event.keyCode == 13 && event.ctrlKey) {
+				//event.preventDefault();
+				//event.stopPropagation();
+				momoda.local.page.executeCode();
+				return false;
+			}
+			else if(event.keyCode == 82 && event.ctrlKey){
+				//event.preventDefault();
+				//event.stopPropagation();
+				momoda.local.page.resetting();
+				return false;
+			}
+			else if(event.keyCode == 8){
+				return false;
+				//event.preventDefault();
+				//event.stopPropagation();
+			}
+		})
+
+	</script>
+	
+</body>
+</html>
