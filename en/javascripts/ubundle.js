@@ -317,7 +317,7 @@ momoda.local.page = {
 				}
 			},
 			error: function(ret){
-				alert("获取场景失败");
+				alert("Fail to load scene!");
 			}
 		});
 	},
@@ -365,7 +365,6 @@ momoda.local.page = {
 		uModel.RunCommand(JSON.stringify(cmd));
 	},
 	createNew: function(){
-		//var id = window.prompt("请输入场景ID", "20170109153114611633853");
 		var id = $("#sceneId").val();
 		if(id){
 			var object = {sceneId: id, action: "view"};
@@ -376,7 +375,7 @@ momoda.local.page = {
 			this.loadScene(object);
 		}
         else{
-            alert("请输入场景ID");
+            alert("Please enter scene ID");
         }
 	},
 	switchScene: function(){
@@ -387,11 +386,11 @@ momoda.local.page = {
 			this.loadScene(object);
 		}
         else{
-            alert("请输入场景ID");
+            alert("Please enter scene ID");
         }
 	},
 	openDocument: function(){
-		window.open("http://www.3dmomoda.com/mmdclient/api/document/documentEN.html");
+		window.open("http://momoda-api-20.readthedocs.io/en/latest/");
 	},
 	showShortcut: function(){
 		var shortcuts = [
