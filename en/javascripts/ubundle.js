@@ -297,13 +297,13 @@ momoda.local.page = {
 				registerDoc(file, ret);
 			},
 			error: function(ret){
-				alert("获取代码失败");
+				alert("fail to load script");
 			}
 		});
 	},
 	loadScene: function(object){
 		$.ajax({
-			url: "http://cors.io/?http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId,
+			url: "https://crossorigin.me/http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId,
 			type: "get",
 			timeout: "20000",
 			async: true,
@@ -325,7 +325,7 @@ momoda.local.page = {
 	loadScriptFromServer: function(object){
         var that = this;
 		$.ajax({
-			url: "http://cors.io/?http://www.3dmomoda.com/models/" + object.sceneId + ".config?" + (new Date()).getTime(),
+			url: "https://crossorigin.me/http://www.3dmomoda.com/models/" + object.sceneId + ".config?" + (new Date()).getTime(),
 			type: "get",
 			timeout: "5000",
 			async: false,
