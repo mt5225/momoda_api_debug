@@ -303,7 +303,7 @@ momoda.local.page = {
 	},
 	loadScene: function(object){
 		$.ajax({
-			url: "http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId,
+			url: "http://cors.io/?http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId,
 			type: "get",
 			timeout: "20000",
 			async: true,
@@ -325,7 +325,7 @@ momoda.local.page = {
 	loadScriptFromServer: function(object){
         var that = this;
 		$.ajax({
-			url: "http://www.3dmomoda.com/models/" + object.sceneId + ".config?" + (new Date()).getTime(),
+			url: "http://cors.io/?http://www.3dmomoda.com/models/" + object.sceneId + ".config?" + (new Date()).getTime(),
 			type: "get",
 			timeout: "5000",
 			async: false,
@@ -337,7 +337,7 @@ momoda.local.page = {
 				}
 			},
 			error: function(ret){
-				console.log("没有脚本");
+				console.log("no script found");
 			}
 		});
 	},
