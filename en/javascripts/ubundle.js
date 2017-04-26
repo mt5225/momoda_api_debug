@@ -307,6 +307,7 @@ momoda.local.page = {
 			type: "get",
 			timeout: "20000",
 			async: true,
+			crossDomain: true,
 			data: {},
 			dataType: "json",
 			success: function(ret){
