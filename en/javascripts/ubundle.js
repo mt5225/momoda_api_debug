@@ -302,9 +302,13 @@ momoda.local.page = {
 		});
 	},
 	loadScene: function(object){
+		var load_url = "https://crossorigin.me/http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId;
+		//try to load it locally
+		if (object.sceneId === '20170109153114611633853' || object.sceneId === '20170417152241210691316' || object.sceneId === '20170418134129476336884') {
+			load_url =  "scenes/" + object.sceneId + ".json";
+		}
 		$.ajax({
-			//url: "https://crossorigin.me/http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId,
-			url: "scenes/" + object.sceneId + ".json",
+			url: load_url,
 			type: "get",
 			timeout: "20000",
 			async: true,
