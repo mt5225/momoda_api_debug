@@ -3,7 +3,7 @@
  */
 var uModel = uModel || {};
 //
-uModel.scene = "ubuilder-0.10.1381.unity3d";
+uModel.scene = "ubuilder-0.11.1406.unity3d";
 uModel.debugging = "0";
 uModel.loadJson = "";
 uModel.param = "";
@@ -13,7 +13,7 @@ uModel.send = function(objName, funName, param) {
 	try {
 		if (uModel.web.getUnity())
 			uModel.web.getUnity().SendMessage(objName, funName, param);
-	} catch (e) { 
+	} catch (e) {
 	}
 };
 uModel.externalInterface = function() {
