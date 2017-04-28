@@ -241,7 +241,7 @@ $.layout = {
 			,	top: 		"auto" // DYNAMIC
 			,	bottom: 	"auto" // DYNAMIC
 			,	height: 	"auto"
-			,	width: 		0
+			,	width: 		"auto"
 			}
 		}
 	}
@@ -843,20 +843,18 @@ $.layout.defaults = {
 	}
 ,	east: {
 		paneSelector:			".ui-layout-east"
-	,	size:					"auto"
+	,	size:					200
 	,	resizerCursor:			"e-resize"
 	,	customHotkey:			""
 	}
 ,	west: {
 		paneSelector:			".ui-layout-west"
-	,	size:					600
+	,	size:					200
 	,	resizerCursor:			"w-resize"
 	,	customHotkey:			""
 	}
 ,	center: {
 		paneSelector:			".ui-layout-center"
-	,	size:					0
-	,   resizable:              false
 	,	minWidth:				0
 	,	minHeight:				0
 	}
