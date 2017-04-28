@@ -166,7 +166,7 @@
             <a id="addFile" class="btn btn-primary" href="javascript:void(0);">+</a>
         </ul>
         <!-- pre id="editor" style=" margin: 0; position: absolute; top: 40px; bottom: 60px; left: 0; right: 0;"></pre -->
-		<pre id="editor" style="width: 0px; height: 0px;"></pre>
+		<pre id="editor" style="display: none !important;"></pre>
 	</div>
 
 	<div class="ui-layout-east ui-layout-pane ui-layout-pane-east" >
@@ -185,29 +185,26 @@
 		$(document).ready(function() {
 			myLayout = $('body').layout({
 				closable : true, // pane can open & close
-				resizable : true, // when open, pane can be resized 
+				resizable : false, // when open, pane can be resized 
 				slidable : false, // when closed, pane can 'slide' open over other panes - closes on mouse-out
 				livePaneResizing : false, //	some resizing/toggling settings
 				
 				north__resizable : false,
 				north__closable : false,
-				east__size : .5,
+				east__size : .85,
 				east__minSize : 600,
 				east__resizable : false,
-				east__maxSize : .8, // 80% of layout width
+				east__spacing_open : 0,
+				east__spacing_closed : 0,
+				//east__maxSize : .8, // 80% of layout width
 			    east__spacing_open: 11,
                 east__spacing_closed: 11,
-				center__minSize : 1,
-				center__resizable : false,
-				center__maxSize : 1, //hide center
-			    center__spacing_open: 0,
-				west__size : .14,
-				west__spacing_open : 11,
-				west__spacing_closed : 11,
+				west__resizable : false,
+				west__spacing_open : 0,
+				west__spacing_closed : 0,
 				south__size : .15,
 				onresize: onresize
 			});
-			//layouts.close("center");
 		});
 
 		function onresize(param){
