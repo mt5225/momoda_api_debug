@@ -138,7 +138,9 @@
 			<input style="font-size:9pt"  type="button" class="btn col-md-3" value="Document" onclick="momoda.local.page.openDocument();">
 			<!--<input type="button" value="快捷键" onclick="momoda.local.page.showShortcut();">-->
 		</div>
-		<input type="text" id="search" placeholder="Search" style="margin-top: 10px; margin-bottom: 10px;" class="form-control"/>
+		<!-- input type="text" id="search" placeholder="Search" style="margin-top: 10px; margin-bottom: 10px;" class="form-control"/ -->
+		<button class="btn btn-primary" onclick="momoda.local.page.executeCode();">Execute</button>
+		<button class="btn" onclick="momoda.local.page.resetting();">Reset scene</button>
 		<div id="contents">
 			<!--<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">-->
 				<!--<div class="panel panel-default">-->
@@ -159,7 +161,8 @@
 		</div>
 	</div>
 
-	<div class="ui-layout-center" id="center" style="position:relative; font-size:14px; overflow-x: hidden" >
+	<!-- div class="ui-layout-center" id="center" style="position:relative; font-size:14px; overflow-x: hidden" -->
+	<div class="ui-layout-center" id="center" style="display: none;" >
         <ul class="tabs" id="docs" style="width: 0px; height: 0px;">
             <a id="addFile" class="btn btn-primary" href="javascript:void(0);">+</a>
         </ul>
