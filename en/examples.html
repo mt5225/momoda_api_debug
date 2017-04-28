@@ -201,13 +201,14 @@
 				center__resizable : false,
 				center__maxSize : 0, //hide center
 			    center__spacing_open: 0,
-                center__spacing_closed: 0,
 				west__size : .14,
 				west__spacing_open : 11,
 				west__spacing_closed : 11,
 				south__size : .15,
 				onresize: onresize
 			});
+			myLayout.close("center");
+    		layout.size("east", "50%");
 		});
 
 		function onresize(param){
