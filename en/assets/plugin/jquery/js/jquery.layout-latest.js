@@ -843,7 +843,7 @@ $.layout.defaults = {
 	}
 ,	east: {
 		paneSelector:			".ui-layout-east"
-	,	size:					200
+	,	size:					"auto"
 	,	resizerCursor:			"e-resize"
 	,	customHotkey:			""
 	}
@@ -855,7 +855,7 @@ $.layout.defaults = {
 	}
 ,	center: {
 		paneSelector:			".ui-layout-center"
-	,	size:					10
+	,	size:					0
 	,	minWidth:				0
 	,	minHeight:				0
 	}
