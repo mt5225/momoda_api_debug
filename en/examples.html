@@ -185,7 +185,7 @@
 		$(document).ready(function() {
 			myLayout = $('body').layout({
 				closable : true, // pane can open & close
-				resizable : false, // when open, pane can be resized 
+				resizable : true, // when open, pane can be resized 
 				slidable : false, // when closed, pane can 'slide' open over other panes - closes on mouse-out
 				livePaneResizing : false, //	some resizing/toggling settings
 				
@@ -197,9 +197,9 @@
 				east__maxSize : .8, // 80% of layout width
 			    east__spacing_open: 11,
                 east__spacing_closed: 11,
-				center__minSize : 0,
+				center__minSize : 1,
 				center__resizable : false,
-				center__maxSize : 0, //hide center
+				center__maxSize : 1, //hide center
 			    center__spacing_open: 0,
 				west__size : .14,
 				west__spacing_open : 11,
