@@ -160,10 +160,11 @@
 	</div>
 
 	<div class="ui-layout-center" id="center" style="position:relative; font-size:14px; overflow-x: hidden" >
-        <ul class="tabs" id="docs" style="width: 50%; height: 0px;">
+        <ul class="tabs" id="docs" style="width: 0px; height: 0px;">
             <a id="addFile" class="btn btn-primary" href="javascript:void(0);">+</a>
         </ul>
-        <pre id="editor" style=" margin: 0; position: absolute; top: 40px; bottom: 60px; left: 0; right: 0;"></pre>
+        <!-- pre id="editor" style=" margin: 0; position: absolute; top: 40px; bottom: 60px; left: 0; right: 0;"></pre -->
+		<pre id="editor" style="width: 0px; height: 0px;"></pre>
 		<hr/>
 		<div style=" position:absolute; width:100%; bottom:0px; height:50px ; background:#fff; text-align:center;" id="btnBox">
 			<button class="btn btn-primary" onclick="momoda.local.page.executeCode();">Execute</button>
