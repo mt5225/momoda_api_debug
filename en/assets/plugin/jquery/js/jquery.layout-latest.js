@@ -241,7 +241,7 @@ $.layout = {
 			,	top: 		"auto" // DYNAMIC
 			,	bottom: 	"auto" // DYNAMIC
 			,	height: 	"auto"
-			,	width: 		"auto"
+			,	width: 		0
 			}
 		}
 	}
