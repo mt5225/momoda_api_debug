@@ -849,13 +849,13 @@ $.layout.defaults = {
 	}
 ,	west: {
 		paneSelector:			".ui-layout-west"
-	,	size:					200
+	,	size:					600
 	,	resizerCursor:			"w-resize"
 	,	customHotkey:			""
 	}
 ,	center: {
 		paneSelector:			".ui-layout-center"
-	,	size:					0
+	,	size:					1
 	,	minWidth:				0
 	,	minHeight:				0
 	}
