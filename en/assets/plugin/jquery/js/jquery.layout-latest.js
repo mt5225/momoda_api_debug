@@ -855,6 +855,7 @@ $.layout.defaults = {
 	}
 ,	center: {
 		paneSelector:			".ui-layout-center"
+	,	size:					10
 	,	minWidth:				0
 	,	minHeight:				0
 	}
