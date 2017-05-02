@@ -3,7 +3,7 @@
  */
 var uModel = uModel || {};
 //
-uModel.scene = "ubuilder-0.11.1408.unity3d";
+uModel.scene = "ubuilder-0.11.1409.unity3d";
 uModel.debugging = "0";
 uModel.loadJson = "";
 uModel.param = "";

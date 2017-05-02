@@ -296,10 +296,7 @@ gui.createButton("Helix", Rect(20, 160, 80, 20), function() {
 gui.createButton("Disk", Rect(20, 180, 80, 20), function() {
 	move_to_disc(0,0);
 });
-gui.createButton("Momoda", Rect(20, 200, 80, 20), function() {
-	
-move_path_MMD(0,0);
-});
+
 gui.createButton("Free Style", Rect((Screen.width-100), 100, 80, 20), function() {
 	G_move=true;
 	move_to_G();
