@@ -130,12 +130,14 @@ gui.createButton("CAM", Rect(100, 50, 70, 30), function () {
 
 
 
+
 /////////////////////////////////////////////////////////////
 ///// elevator part begin
 /////////////////////////////////////////////////////////////
 var elevatorObj = null;
 var elevatorUI = null;
 var currentFloorNumber = 0;
+var btnElevators = [];
 
 function playAnimation(floorNumber, action) {
 	var door = object.find("door_" + floorNumber);
@@ -182,31 +184,31 @@ function moveToFloor(destFloor) {
 ////////////////
 function initElevatorMenu() {
 	//// create a set of button to move elevator
-	gui.createButton("1st floor", Rect(10, 100, 70, 30),
+	array.add(btnElevators, gui.createButton("1st floor", Rect(10, 100, 70, 30),
 		function () {
 		moveToFloor(0)
-	});
+	}));
 	//// create a set of button
-	gui.createButton("2nd floor", Rect(10, 150, 70, 30),
+	array.add(btnElevators, gui.createButton("2nd floor", Rect(10, 150, 70, 30),
 		function () {
 		moveToFloor(1)
-	});
+	}));
 	//// create a set of button
-	gui.createButton("3rd floor", Rect(10, 200, 70, 30),
+	array.add(btnElevators, gui.createButton("3rd floor", Rect(10, 200, 70, 30),
 		function () {
 		moveToFloor(2)
-	});
+	}));
 	//// create a set of button
-	gui.createButton("4th floor", Rect(10, 250, 70, 30),
+	array.add(btnElevators, gui.createButton("4th floor", Rect(10, 250, 70, 30),
 		function () {
 		moveToFloor(3)
-	});
+	}));
 
 	//// create a set of button
-	gui.createButton("5th floor", Rect(10, 300, 70, 30),
+	array.add(btnElevators, gui.createButton("5th floor", Rect(10, 300, 70, 30),
 		function () {
 		moveToFloor(4)
-	});
+	}));
 }
 
 ///////////////////////////////
@@ -228,13 +230,28 @@ gui.createButton("B_001", Rect(10, 50, 70, 30), function () {
 				});
 			commandManager.RunJson(cmdJson, true);
 			// create elevator menu
-			initElevatorMenu();
+			
 		}, 500);
 
 		// create the elevator
 		elevatorObj = object.find("elevator01");
+		initElevatorMenu();
 	}
 });
+
+util.addEventListener("levelchange",function(obj) {
+    //console.log(obj.ClsID);
+    if(obj.ClsID == ObjectFactory.CLSID_WORLD){
+       if(btnElevators.length == 5) {
+	   for(var i=0; i<5; i++) {
+	       gui.destroy(btnElevators[i]);
+	   }
+           btnElevators = [];
+       } 
+    } else if(obj.ClsID == ObjectFactory.CLSID_BUILDING){
+    } else if(obj.ClsID == ObjectFactory.CLSID_FLOORPLAN){
+    }
+})
 /////////////////////////////////////////////////////////////
 ///// elevator part end
 /////////////////////////////////////////////////////////////
