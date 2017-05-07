@@ -1,0 +1,240 @@
+///////////////////////////////////////////
+// object part begin
+///////////////////////////////////////////
+
+// create object and set color
+var obj_green = object.create("76159D87D8F24601B80B3BB8F475E7BE", Vector3(0, 0, -44));
+obj_green.setScale(0.3,0.3,0.3);
+obj_green.uid = "obj_green";
+obj_green.addProperty("info", "TK348901");
+
+
+// set color yellow 
+var obj_yellow = object.create("4E71B856E3A44747A4B763B880C6298E", Vector3(-4, 0, -46));
+obj_yellow.setScale(0.3,0.3,0.3);
+obj_yellow.uid = "obj_yellow";
+obj_yellow.addProperty("info", "SEC8923");
+
+// set color blue 
+var obj_blue = object.create("02EC55309AEA4A95985B17D18C58CCC7", Vector3(-8, 0, -48));
+obj_blue.setScale(0.3,0.3,0.3);
+obj_blue.uid = "obj_blue";
+obj_blue.addProperty("info", "Jerry Jiang");
+
+// set color clay 
+var obj_clay = object.create("D691D9A5C10D471EBD498C8B1163C2F5", Vector3(-8, 0, -50));
+obj_clay.setScale(0.3,0.3,0.3);
+obj_clay.uid = "obj_clay";
+obj_clay.addProperty("info", "Visitor V101");
+
+// create and banner
+var ui = null;
+
+// init banner
+util.download({
+	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/outline_button.bundle", 
+	"success":  function(res) {
+		ui = gui.create(res);
+		ui.setObject(null, null);
+		ui.setScale(0.3,0.3);
+	}
+});
+
+// register mouse down event
+var downPos = null;
+
+util.addEventListener("mousedown", function(event) {
+	downPos = Vector2(event.x, event.y);
+});
+
+// register mouse click event
+util.addEventListener("click", function(event) {
+	
+	if (Vector2.Distance(downPos, Vector2(event.x, event.y)) > 3) //hide the banner
+	{
+		//console.log("hide banner");
+		ui.setObject(null, null);
+	}
+
+	if (event.obj) {
+		//console.log(event.obj.uid);
+		show_banner(event.obj);
+	}
+});
+
+// start moving object
+// define moving method
+function move_to_next(obj) {
+	obj.moveTo({
+		"pos": util.randomVector3Around(obj, 1, 0, 1), // random location
+		"delay": 3.0,
+		"speed": 0.3,
+		"oncomplete":function() {
+			move_to_next(obj);
+		}
+	});
+}
+
+ move_to_next(obj_green);
+ move_to_next(obj_yellow);
+ move_to_next(obj_blue);
+ move_to_next(obj_clay);
+
+//////////////////////////
+//show banner
+function show_banner(obj) {
+		var offsetY = obj.size.y;
+		ui.setObject(obj, Vector3(0, offsetY, 0));
+		//ui.setText("Button/Text", obj.uid);
+		ui.setText("Button/Text", obj.getProperty("info"));
+		ui.regButtonEvent("Button", function() {
+			//console.log(obj.uid);
+			util.externalEval("window.open('/" + obj.uid + ".html','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350\");");
+		});
+}
+
+///////////////////////////////////////////
+// object part end
+///////////////////////////////////////////
+
+
+/////////////////////////////////////
+/// camera start
+/////////////////////////////////////
+function init_balloon(res) {
+	for (var i = 1; i < 5; i++) {
+		var obj = object.find("cam00" + i);
+		var ui = gui.create(res);
+		var offsetY = obj.size.y;
+		ui.setObject(obj, Vector3(0, offsetY, 0));
+		ui.setScale(0.3, 0.3);
+		ui.setText("Button/Text", i);
+		var url = "/cam00" + i + ".html";
+		ui.regButtonEvent("Button", function () {	
+			util.externalEval("window.open('" + url + "','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=350,height=350\");");
+		});
+	}
+};
+
+gui.createButton("CAM", Rect(100, 50, 70, 30), function () {
+	util.download({
+		"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/balloon_button.bundle",
+		"success": init_balloon
+	});
+
+});
+
+/////////////////////////////////////
+/// camera end
+/////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////
+///// elevator part begin
+/////////////////////////////////////////////////////////////
+var elevatorObj = null;
+var elevatorUI = null;
+var currentFloorNumber = 0;
+
+function playAnimation(floorNumber, action) {
+	var door = object.find("door_" + floorNumber);
+	if (door != null) {
+		if (action == 'open') {
+			door.Open();
+		} else {
+			door.Close();
+		}
+	}
+}
+
+function moveToFloor(destFloor) {
+	//console.log("move to : " + destFloor);
+	//get elevator position
+	var pos = elevatorObj.getPosition();
+	//console.log("elevator position: " + pos);
+	if (destFloor != currentFloorNumber) //about to move
+	{
+		var target = Building.current.planList.get_Item(destFloor);
+		var pos = elevatorObj.getPosition();
+		pos.y = target.getPosition().y;
+		var timeStep = 1;
+		elevatorObj.setColorFlash(true, Color.red);
+		//playAnimation(currentFloorNumber, 'open');
+		elevatorObj.moveTo({
+			"pos": pos,
+			"orientToPath": false,
+			"speed": timeStep,
+			"easeType": "easeInOutCubic",
+			"oncomplete": function () {
+				//playAnimation(destFloor, 'open');
+				elevatorObj.setColorFlash(false);
+				currentFloorNumber = destFloor;
+
+			}
+		});
+	}
+
+}
+
+////////////////
+// create elevator menu
+////////////////
+function initElevatorMenu() {
+	//// create a set of button to move elevator
+	gui.createButton("1st floor", Rect(10, 100, 70, 30),
+		function () {
+		moveToFloor(0)
+	});
+	//// create a set of button
+	gui.createButton("2nd floor", Rect(10, 150, 70, 30),
+		function () {
+		moveToFloor(1)
+	});
+	//// create a set of button
+	gui.createButton("3rd floor", Rect(10, 200, 70, 30),
+		function () {
+		moveToFloor(2)
+	});
+	//// create a set of button
+	gui.createButton("4th floor", Rect(10, 250, 70, 30),
+		function () {
+		moveToFloor(3)
+	});
+
+	//// create a set of button
+	gui.createButton("5th floor", Rect(10, 300, 70, 30),
+		function () {
+		moveToFloor(4)
+	});
+}
+
+///////////////////////////////
+// create button: fly into building and make it transparent
+// TODO: adjust camera
+///////////////////////////////
+gui.createButton("B_001", Rect(10, 50, 70, 30), function () {
+	if (world.buildingList.Count > 0) {
+		var building = world.buildingList.get_Item(0);
+
+		//fly into building
+		util.setTimeout(function () {
+			level.change(building);
+			// test set building transparent
+			var cmdJson = json.encode({
+					"cmd": "SetBuildingTransparent",
+					"id": building.ID,
+					"trans": 0.3
+				});
+			commandManager.RunJson(cmdJson, true);
+			// create elevator menu
+			initElevatorMenu();
+		}, 500);
+
+		// create the elevator
+		elevatorObj = object.find("elevator01");
+	}
+});
+/////////////////////////////////////////////////////////////
+///// elevator part end
+/////////////////////////////////////////////////////////////

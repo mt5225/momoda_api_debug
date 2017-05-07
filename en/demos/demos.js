@@ -5,6 +5,9 @@
 var scriptVersion = "v1319";
 
 var exampleLib = {
+    "main": [
+         {"name": "CMS",    "file": "./demos/maxtrak.txt", "sceneId": "20170504082603304643309", action: "view"}
+	],
     "creation": [
          {"name": "creating object",    "file": "./demos/test_hello.txt", "sceneId": "20170109153114611633853", action: "view"}
 		,{"name": "finding object",    "file": "./demos/test_find.txt", "sceneId": "20170109153114611633853", action: "view"}

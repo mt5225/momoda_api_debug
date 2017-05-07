@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>CAM002</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<object classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" codebase="http://download.videolan.org/pub/videolan/vlc/last/win32/axvlc.cab">
+    <param name="autostart" value="true" />
+    <param name="allowfullscreen" value="false" />
+	<param name="target" value="rtsp://101.201.112.211:8000/video01.vob" />
+	<param name="width" value=320 />
+	<param name="height" value=320 />
+</object>
+
+
+<script>
+$(document).ready(function() {
+    window.resizeTo(350,320);
+});
+</script>
+
+
+</body>
+</html>
