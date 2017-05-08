@@ -303,8 +303,8 @@ momoda.local.page = {
 	},
 	loadScene: function(object){
 		$.ajax({
-			//url: "https://crossorigin.me/http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId,
-			url: "scenes/" + object.sceneId + ".json",
+			url: "https://crossorigin.me/http://momoda.3dmmd.com/scene/downjson?sceneid=" + object.sceneId,
+			//url: "scenes/" + object.sceneId + ".json",
 			type: "get",
 			timeout: "20000",
 			async: true,
