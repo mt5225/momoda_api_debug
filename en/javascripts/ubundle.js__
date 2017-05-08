@@ -335,7 +335,7 @@ momoda.local.page = {
 		uModel.RunCommand(JSON.stringify(cmd));
 	},
 	createNew: function(){
-		var id = window.prompt("请输入场景ID", "20170109153114611633853");
+		var id = window.prompt("请输入场景ID", "20170508194011659972");
 		if(id){
 			var object = {sceneId: id, action: "view"};
 			//this.setEditorText("");
