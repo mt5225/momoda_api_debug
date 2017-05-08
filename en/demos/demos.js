@@ -35,7 +35,7 @@ var exampleLib = {
     "GUI": [
         {"name": "simple GUI",    "file": "./demos/test_gui.txt", "sceneId": "20170508194011659972", action: "view"}
         ,{"name": "texture GUI",    "file": "./demos/test_gui_res.txt", "sceneId": "20170508194011659972", action: "view"}
-        ,{"name": "advanced GUI",    "file": "./demos/test_ugui.txt", "sceneId": "20170113100919861586487", action: "view"}
+        ,{"name": "advanced GUI",    "file": "./demos/test_ugui.txt", "sceneId": "20170508194011659972", action: "view"}
     ],
     "overhead-card": [
         {"name": "fixed position",    "file": "./demos/test_ugui_balloon.txt", "sceneId": "20170508194011659972", action: "view"}
