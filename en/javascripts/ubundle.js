@@ -304,7 +304,7 @@ momoda.local.page = {
 	loadScene: function(object){
 		var load_url = "https://crossorigin.me/http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId;
 		//try to load it locally
-		if (object.sceneId === '20170109153114611633853' || object.sceneId === '20170417152241210691316' || object.sceneId === '20170418134129476336884') {
+		if (object.sceneId === '20170109153114611633853' || object.sceneId === '20170417152241210691316' || object.sceneId === '20170418134129476336884' || object.sceneId === '20170504082603304643309') {
 			load_url =  "scenes/" + object.sceneId + ".json";
 		}
 		$.ajax({

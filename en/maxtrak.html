@@ -1,0 +1,300 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>MMDAPI2.0</title>
+	<meta charset="utf-8" />
+	<link type="text/css" rel="stylesheet" href="assets/plugin/jquery/css/layout-default-latest.css" />
+	<link rel="stylesheet" type="text/css" href="assets/plugin/bootstrap/css/bootstrap.min.css" />
+	<script type="text/javascript" src="assets/plugin/jquery/js/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="assets/plugin/jquery/js/jquery-ui-latest.js"></script>
+	<script type="text/javascript" src="assets/plugin/jquery/js/jquery.layout-latest.js"></script>
+	<script type="text/javascript" src="assets/plugin/ace-builds/src-noconflict/ace.js"></script>
+	<script type="text/javascript" src="javascripts/ubundle.js"></script>
+	<script type="text/javascript" src="javascripts/UnityObject2.js"></script>
+	<script type="text/javascript" src="javascripts/umodel.js"></script>
+	<script type="text/javascript" src="demos/demos.js"></script>
+	<script type="text/javascript" src="javascripts/editor.js"></script>
+	<style>
+		ul.tabs {
+			list-style: none;
+			margin: 0 0 -1px 0;
+			padding: 0 0 0 37px;
+			font-family: "Ubuntu Mono";
+			overflow: hidden;
+			width: 2000px;
+		}
+
+		ul.tabs li {
+			font-size: 11pt;
+			color: #777;
+			cursor: pointer;
+			margin: 0 2px 0 0;
+			padding: 2px 10px 5px;
+			border: 1px solid silver;
+			border-bottom-width: 0px;
+			background: #f3f3f3;
+			display: inline-block;
+			z-index: 1;
+			border-top-left-radius: 6px;
+			border-top-right-radius: 6px;
+			position: relative;
+		}
+
+		ul.tabs li:hover {
+			color: #444;
+		}
+
+		ul.tabs li.selected {
+			background: white;
+			color: #222;
+			z-index: 3;
+			cursor: default;
+		}
+
+		ul.tabs li:before,
+		ul.tabs li:after {
+			position: absolute;
+			bottom: 0;
+			width: 6px;
+			height: 6px;
+			content: " ";
+			border: 1px solid silver;
+		}
+
+		ul.tabs li:before {
+			left: -7px;
+			border-bottom-right-radius: 6px;
+			border-width: 0 1px 1px 0;
+			box-shadow: 2px 2px 0 #f3f3f3;
+		}
+
+		ul.tabs li:after {
+			right: -7px;
+			border-bottom-left-radius: 6px;
+			border-width: 0 0 1px 1px;
+			box-shadow: -2px 2px 0 #f3f3f3;
+		}
+
+		ul.tabs li.selected:before {
+			box-shadow: 2px 2px 0 white;
+		}
+
+		ul.tabs li.selected:after {
+			box-shadow: -2px 2px 0 white;
+		}
+
+		.one-line {
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+
+		.multi-line {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			word-break: break-word;
+		}
+
+		::-webkit-scrollbar-track-piece:vertical {
+			-webkit-border-radius: 2px;
+			background-color: #ddd;
+		}
+
+		::-webkit-scrollbar {
+			width: 10px;
+			height: 10px;
+		}
+
+		::-webkit-scrollbar-thumb:vertical {
+			height: 50px;
+			background-color: #ccc;
+			-webkit-border-radius: 2px;
+		}
+
+		::-webkit-scrollbar-thumb:vertical:hover {
+			height: 50px;
+			background-color: #878585;
+			-webkit-border-radius: 6px;
+		}
+
+		::-webkit-scrollbar-corner {
+			height: 10px;
+			background-color: #ECECEC;
+		}
+		/*override*/
+
+		.panel-default>.panel-heading {
+			background-color: #ccc;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="ui-layout-west" style="font-size:8px; width: 8% !important;">
+		<!--<img class="img-responsive" src="./images/maxtrak_logo.png" width="90px"/>-->
+		<!-- span style="color: rgb(107,107,107); font-size: 18px;">API Debug</span>
+		<span id="version"></span -->
+		<input type="text" id="sceneId" placeholder="sceneId" style="display: none !important;" class="form-control" />
+		<br/>
+		<div class="row">
+			<!-- input style="font-size:9pt" type="button" class="btn col-md-offset-1 col-md-3" value="New" onclick="momoda.local.page.createNew();" -->
+			<!--<input style="text-align: center;"  type="button" style="display: none !important;" value="Open" onclick="momoda.local.page.switchScene();">-->
+			<!--<input style="font-size:9pt"  type="button" class="btn col-md-offset-1 col-md-3" value="Doc" onclick="momoda.local.page.openDocument();">-->
+			<!--<input type="button" value="快捷键" onclick="momoda.local.page.showShortcut();">-->
+		</div>
+		<br/>
+		<div class="row">
+			<!-- input type="text" id="search" placeholder="Search" style="margin-top: 10px; margin-bottom: 10px;" class="form-control"/ -->
+			<button id="btnRun" class="btn btn-primary btn col-md-offset-1 col-md-4" style="text-align: center;" onclick="momoda.local.page.executeCode();">Run</button>
+		</div>
+		<br/>
+		<div id="contents" style="display: none !important;">
+		</div>
+	</div>
+
+	<div class="ui-layout-center" id="center" style="display: none !important; width: 0% !important;">
+		<ul class="tabs" id="docs" style="width: 0px; height: 0px;">
+			<a id="addFile" class="btn btn-primary" href="javascript:void(0);">+</a>
+		</ul>
+		<!-- pre id="editor" style=" margin: 0; position: absolute; top: 40px; bottom: 60px; left: 0; right: 0;"></pre -->
+		<pre id="editor" style="display: none !important;"></pre>
+	</div>
+
+	<div class="ui-layout-east ui-layout-pane ui-layout-pane-east">
+		<div class="3D" id="3D" style="width: 600px; height: 100%;">
+			<div class="content">
+				<div id="unityPlayer" style="width:100%; height:100%;">
+					<div class="missing">
+						<a href="http://demo.sitetrak360.com/download/UnityWebPlayerFull-5.3.4f1.exe" title="plugin download link" style="display: none"> download unity3D webplayer plugin for windows </a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var myLayout;
+		$(document).ready(function () {
+			myLayout = $('body').layout({
+				closable: true, // pane can open & close
+				resizable: false, // when open, pane can be resized 
+				slidable: false, // when closed, pane can 'slide' open over other panes - closes on mouse-out
+				livePaneResizing: false, //	some resizing/toggling settings
+
+				north__resizable: false,
+				north__closable: false,
+				east__size: .99,
+				east__minSize: 1200,
+				east__resizable: false,
+				east__spacing_open: 0,
+				east__spacing_closed: 0,
+				center__resizable: false,
+				center__spacing_open: 0,
+				center__spacing_closed: 0,
+				west__resizable: true,
+				west__spacing_open: 0,
+				west__spacing_closed: 0,
+				south__size: .15,
+				onresize: onresize
+			});
+
+			// 加载场景后执行的方法，mmd提供的内部方法
+			uModel.OnLoadComplete = function () {
+				console.log("finish loading ....");
+				uModel.RunCommand(JSON.stringify(momoda.local.scene.cmds), true);
+				$("#btnRun").click();
+			};
+		});
+
+		function onresize(param) {
+			uModel.resize($("#3D").width(), $(window).height() - 20);
+			resizeEditor();
+		}
+
+		function checkPlugins() {
+			var np = navigator.plugins;
+			if (window.ActiveXObject) {
+				var pluginName = "UnityWebPlayer";
+				var activexObjectName = pluginName + "." + pluginName;
+				try {
+					var axobj = eval("new ActiveXObject(activexObjectName);");
+					// 将对象转化为布尔类型
+					return axobj ? true : false;
+				} catch (e) {
+					return false;
+				}
+			} else if (np && np.length) {
+				// 非IE
+				var pluginName = "Unity Player"
+				for (var i = 0; i < np.length; i++) {
+					if (np[i].name.toLowerCase().indexOf(pluginName.toLowerCase()) != -1)
+						return true;
+				}
+				return false;
+			} else {
+				// 其他则返回false
+				return false;
+			}
+		}
+
+		function clickRunButton() {
+			$("#btnRun").click();
+		}
+
+		jQuery(function () {
+			momoda.local.page.showCmds();
+			//momoda.local.scene.init();
+			$("#version").text("" + scriptVersion);
+			if (!checkPlugins()) {
+				$("#unityPlayer a").css({ display: "block" });
+			}
+			// load maxtrak data
+			$("#accordion").find('.list-group-item').click();
+		});
+
+		$("input").keydown(function (event) {
+			if (event.keyCode == 13) {
+				momoda.local.page.queryExample();
+			}
+		});
+
+		$(window).resize(function () {
+			onresize();
+			//uModel.resize($("#3D").width() - 20,$(window).height() - 20);
+		});
+
+		$(document).on("keydown", false, function (event) {
+			if (event.keyCode == 13 && event.ctrlKey) {
+				//event.preventDefault();
+				//event.stopPropagation();
+				momoda.local.page.executeCode();
+				return false;
+			}
+			else if (event.keyCode == 82) {
+				//event.preventDefault();
+				//event.stopPropagation();
+				console.log("run while click " + event.keyCode);
+				$("#btnRun").click();
+				return false;
+			}
+			else if (event.keyCode == 82 && event.ctrlKey) {
+				//event.preventDefault();
+				//event.stopPropagation();
+				momoda.local.page.resetting();
+				return false;
+			}
+			else if (event.keyCode == 8) {
+				return false;
+				//event.preventDefault();
+				//event.stopPropagation();
+			}
+		})
+	</script>
+
+</body>
+
+</html>

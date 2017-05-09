@@ -91,7 +91,22 @@ jQuery(function() {
         }
 
         //添加默认编辑页面
-        registerDoc("new1", "");
+        $.ajax({
+			url: 'demos/maxtrak.txt',
+			type: "get",
+			timeout: "5000",
+			async: false,
+			data: {},
+			dataType: "text",
+			success: function(ret){
+				//that.setEditorText(ret);
+                 registerDoc("new1", ret);
+			},
+			error: function(ret){
+				alert("fail to load script");
+			}
+		});
+       
     });
 
     docsBindClick();
