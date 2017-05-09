@@ -4,26 +4,26 @@
 
 // create object and set color
 var obj_green = object.create("76159D87D8F24601B80B3BB8F475E7BE", Vector3(0, 0, -44));
-obj_green.setScale(0.3,0.3,0.3);
+obj_green.setScale(0.3, 0.3, 0.3);
 obj_green.uid = "obj_green";
 obj_green.addProperty("info", "TK348901");
 
 
 // set color yellow 
 var obj_yellow = object.create("4E71B856E3A44747A4B763B880C6298E", Vector3(-4, 0, -46));
-obj_yellow.setScale(0.3,0.3,0.3);
+obj_yellow.setScale(0.3, 0.3, 0.3);
 obj_yellow.uid = "obj_yellow";
 obj_yellow.addProperty("info", "SEC8923");
 
 // set color blue 
 var obj_blue = object.create("02EC55309AEA4A95985B17D18C58CCC7", Vector3(-8, 0, -48));
-obj_blue.setScale(0.3,0.3,0.3);
+obj_blue.setScale(0.3, 0.3, 0.3);
 obj_blue.uid = "obj_blue";
 obj_blue.addProperty("info", "Jerry Jiang");
 
 // set color clay 
 var obj_clay = object.create("D691D9A5C10D471EBD498C8B1163C2F5", Vector3(-8, 0, -50));
-obj_clay.setScale(0.3,0.3,0.3);
+obj_clay.setScale(0.3, 0.3, 0.3);
 obj_clay.uid = "obj_clay";
 obj_clay.addProperty("info", "Visitor V101");
 
@@ -32,23 +32,23 @@ var ui = null;
 
 // init banner
 util.download({
-	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/outline_button.bundle", 
-	"success":  function(res) {
+	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/outline_button.bundle",
+	"success": function (res) {
 		ui = gui.create(res);
 		ui.setObject(null, null);
-		ui.setScale(0.3,0.3);
+		ui.setScale(0.3, 0.3);
 	}
 });
 
 // register mouse down event
 var downPos = null;
 
-util.addEventListener("mousedown", function(event) {
+util.addEventListener("mousedown", function (event) {
 	downPos = Vector2(event.x, event.y);
 });
 
 // register mouse click event
-util.addEventListener("click", function(event) {
+util.addEventListener("click", function (event) {
 	if (input.getMouseButtonUp(1)) //hide the banner
 	{
 		//console.log("hide banner");
@@ -67,24 +67,24 @@ function move_to_next(obj) {
 		"pos": util.randomVector3Around(obj, 1, 0, 1), // random location
 		"delay": 3.0,
 		"speed": 0.3,
-		"oncomplete":function() {
+		"oncomplete": function () {
 			move_to_next(obj);
 		}
 	});
 }
 
- move_to_next(obj_green);
- move_to_next(obj_yellow);
- move_to_next(obj_blue);
- move_to_next(obj_clay);
+move_to_next(obj_green);
+move_to_next(obj_yellow);
+move_to_next(obj_blue);
+move_to_next(obj_clay);
 
 
-function change_ui_image(ui){	
+function change_ui_image(ui) {
 	var urlBase = "http://www.3dmomoda.com/mmdclient/script/examples/demos/";
 	util.downloadTexture({
 		"url": urlBase + "demo_panel_001.png",
-		"success":function(tex) {
-			ui.setImage("Button",tex);
+		"success": function (tex) {
+			ui.setImage("Button", tex);
 		}
 	});
 }
@@ -92,15 +92,15 @@ function change_ui_image(ui){
 //////////////////////////
 //show banner
 function show_banner(obj) {
-		var offsetY = obj.size.y;
-		ui.setObject(obj, Vector3(0, offsetY, 0));
-		//ui.setText("Button/Text", obj.uid);
-		ui.setText("Button/Text", obj.getProperty("info"));
-		change_ui_image(ui);
-		ui.regButtonEvent("Button", function() {
-			//console.log(obj.uid);
-			util.externalEval("window.open('/" + obj.uid + ".html','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350\");");
-		});
+	var offsetY = obj.size.y;
+	ui.setObject(obj, Vector3(0, offsetY, 0));
+	//ui.setText("Button/Text", obj.uid);
+	ui.setText("Button/Text", obj.getProperty("info"));
+	change_ui_image(ui);
+	ui.regButtonEvent("Button", function () {
+		//console.log(obj.uid);
+		util.externalEval("window.open('/" + obj.uid + ".html','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350\");");
+	});
 }
 
 ///////////////////////////////////////////
@@ -111,19 +111,33 @@ function show_banner(obj) {
 /////////////////////////////////////
 /// camera start
 /////////////////////////////////////
+
+var showBalloon = true;
+var balloonList = [];
 function init_balloon(res) {
-	for (var i = 1; i < 5; i++) {
-		var obj = object.find("cam00" + i);
-		var ui = gui.create(res);
-		var offsetY = obj.size.y;
-		ui.setObject(obj, Vector3(0, offsetY, 0));
-		ui.setScale(0.3, 0.3);
-		ui.setText("Button/Text", i);
-		var url = "/cam00" + i + ".html";
-		ui.regButtonEvent("Button", function () {	
-			util.externalEval("window.open('" + url + "','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=350,height=350\");");
-		});
+	if (showBalloon) {
+		for (var i = 1; i < 5; i++) {
+			var obj = object.find("cam00" + i);
+			var ui = gui.create(res);
+			var offsetY = obj.size.y;
+			ui.setObject(obj, Vector3(0, offsetY, 0));
+			ui.setScale(0.3, 0.3);
+			ui.setText("Button/Text", i);
+			var url = "/cam00" + i + ".html";
+			ui.regButtonEvent("Button", function () {
+				util.externalEval("window.open('" + url + "','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=350,height=350\");");
+			});
+			array.add(balloonList, ui);
+		}
+		showBalloon = false;
+	} else {
+		for (var i = 0; i < 4; i++) {
+			balloonList[i].destroy();
+		}
+		balloonList = [];
+		showBalloon = true;
 	}
+
 };
 
 gui.createButton("CAM", Rect(100, 50, 70, 30), function () {
@@ -196,29 +210,29 @@ function initElevatorMenu() {
 	//// create a set of button to move elevator
 	array.add(btnElevators, gui.createButton("1st floor", Rect(10, 100, 70, 30),
 		function () {
-		moveToFloor(0)
-	}));
+			moveToFloor(0)
+		}));
 	//// create a set of button
 	array.add(btnElevators, gui.createButton("2nd floor", Rect(10, 150, 70, 30),
 		function () {
-		moveToFloor(1)
-	}));
+			moveToFloor(1)
+		}));
 	//// create a set of button
 	array.add(btnElevators, gui.createButton("3rd floor", Rect(10, 200, 70, 30),
 		function () {
-		moveToFloor(2)
-	}));
+			moveToFloor(2)
+		}));
 	//// create a set of button
 	array.add(btnElevators, gui.createButton("4th floor", Rect(10, 250, 70, 30),
 		function () {
-		moveToFloor(3)
-	}));
+			moveToFloor(3)
+		}));
 
 	//// create a set of button
 	array.add(btnElevators, gui.createButton("5th floor", Rect(10, 300, 70, 30),
 		function () {
-		moveToFloor(4)
-	}));
+			moveToFloor(4)
+		}));
 }
 
 ///////////////////////////////
@@ -234,13 +248,13 @@ gui.createButton("B_001", Rect(10, 50, 70, 30), function () {
 			level.change(building);
 			// test set building transparent
 			var cmdJson = json.encode({
-					"cmd": "SetBuildingTransparent",
-					"id": building.ID,
-					"trans": 0.3
-				});
+				"cmd": "SetBuildingTransparent",
+				"id": building.ID,
+				"trans": 0.3
+			});
 			commandManager.RunJson(cmdJson, true);
 			// create elevator menu
-			
+
 		}, 500);
 
 		// create the elevator
@@ -249,18 +263,18 @@ gui.createButton("B_001", Rect(10, 50, 70, 30), function () {
 	}
 });
 
-util.addEventListener("levelchange",function(obj) {
-    //console.log(obj.ClsID);
-    if(obj.ClsID == ObjectFactory.CLSID_WORLD){
-       if(btnElevators.length == 5) {
-	   for(var i=0; i<5; i++) {
-	       gui.destroy(btnElevators[i]);
-	   }
-           btnElevators = [];
-       } 
-    } else if(obj.ClsID == ObjectFactory.CLSID_BUILDING){
-    } else if(obj.ClsID == ObjectFactory.CLSID_FLOORPLAN){
-    }
+util.addEventListener("levelchange", function (obj) {
+	//console.log(obj.ClsID);
+	if (obj.ClsID == ObjectFactory.CLSID_WORLD) {
+		if (btnElevators.length == 5) {
+			for (var i = 0; i < 5; i++) {
+				gui.destroy(btnElevators[i]);
+			}
+			btnElevators = [];
+		}
+	} else if (obj.ClsID == ObjectFactory.CLSID_BUILDING) {
+	} else if (obj.ClsID == ObjectFactory.CLSID_FLOORPLAN) {
+	}
 })
 /////////////////////////////////////////////////////////////
 ///// elevator part end
