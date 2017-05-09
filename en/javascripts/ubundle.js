@@ -199,7 +199,7 @@ momoda.local.page = {
 			if (hasNext(tutorial)) {
 				var list = $("<ul class='list-group' style='margin-bottom: 0px;'></ul>");
 				for ( var i in tutorial) {
-					var str = "<li class='list-group-item' style='cursor: pointer;' data = '" + JSON.stringify(tutorial[i]) +"' onclick='momoda.local.page.selectSomeOne(this);'>"
+					var str = "<li class='list-group-item' id='" + tutorial[i].name +  "_scene' style='cursor: pointer;' data = '" + JSON.stringify(tutorial[i]) +"' onclick='momoda.local.page.selectSomeOne(this);'>"
 							+ tutorial[i].name + "</li>";
                     list.append($(str));
 				}
@@ -304,7 +304,7 @@ momoda.local.page = {
 	loadScene: function(object){
 		var load_url = "https://crossorigin.me/http://www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId;
 		//try to load it locally
-		if (object.sceneId === '20170109153114611633853' || object.sceneId === '20170417152241210691316' || object.sceneId === '20170418134129476336884' || object.sceneId === '20170504082603304643309') {
+		if (object.sceneId === '20170109153114611633853' || object.sceneId === '20170417152241210691316' || object.sceneId === '20170418134129476336884' || object.sceneId === '20170504082603304643309' || object.sceneId === '20160329211902106773049' || object.sceneId === '20150923601692') {
 			load_url =  "scenes/" + object.sceneId + ".json";
 		}
 		$.ajax({

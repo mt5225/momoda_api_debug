@@ -5,8 +5,11 @@
 var scriptVersion = "v1319";
 
 var exampleLib = {
-    "": [
-         {"name": "",    "file": "./demos/maxtrak.txt", "sceneId": "20170504082603304643309", action: "view"}
+    "maxtrak": [
+         {"name": "maxtrak",    "file": "./demos/maxtrak.txt", "sceneId": "20170504082603304643309", action: "view"}
+	],
+     "office": [
+         {"name": "office",    "file": "./demos/office.txt", "sceneId": "20150923601692", action: "view"}
 	]
 }
 
