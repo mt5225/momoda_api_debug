@@ -62,9 +62,9 @@ var exampleLib = {
 		
     ],
     "comprehensive": [
-        {"name": "elevator",  "file": "./demos/test_elevator.txt", "sceneId": "20170417152241210691316", action: "view"}
+        {"name": "elevator",  "file": "./demos/test_elevator.txt", "sceneId": "20170509071727381488725", action: "view"}
 		,{"name": "sphere transformation",  "file": "./demos/test_chr.txt", "sceneId": "20170508194011659972", action: "view"}
-		,{"name": "data center",  "files": ["./demos/test_datacenter/opening.txt", "./demos/test_datacenter/bar_chart.txt", "./demos/test_datacenter/cabinet.txt", "./demos/test_datacenter/main.txt"], "sceneId": "20170418134129476336884", action: "view"}
+		,{"name": "data center",  "files": ["./demos/test_datacenter/opening.txt", "./demos/test_datacenter/bar_chart.txt", "./demos/test_datacenter/cabinet.txt", "./demos/test_datacenter/main.txt"], "sceneId": "20170509071839952067889", action: "view"}
     ]
 	
 }
