@@ -49,13 +49,11 @@ util.addEventListener("mousedown", function(event) {
 
 // register mouse click event
 util.addEventListener("click", function(event) {
-	
-	if (Vector2.Distance(downPos, Vector2(event.x, event.y)) > 3) //hide the banner
+	if (input.getMouseButtonUp(1)) //hide the banner
 	{
 		//console.log("hide banner");
 		ui.setObject(null, null);
 	}
-
 	if (event.obj) {
 		//console.log(event.obj.uid);
 		show_banner(event.obj);
@@ -80,6 +78,17 @@ function move_to_next(obj) {
  move_to_next(obj_blue);
  move_to_next(obj_clay);
 
+
+function change_ui_image(ui){	
+	var urlBase = "http://www.3dmomoda.com/mmdclient/script/examples/demos/";
+	util.downloadTexture({
+		"url": urlBase + "demo_panel_001.png",
+		"success":function(tex) {
+			ui.setImage("Button",tex);
+		}
+	});
+}
+
 //////////////////////////
 //show banner
 function show_banner(obj) {
@@ -87,6 +96,7 @@ function show_banner(obj) {
 		ui.setObject(obj, Vector3(0, offsetY, 0));
 		//ui.setText("Button/Text", obj.uid);
 		ui.setText("Button/Text", obj.getProperty("info"));
+		change_ui_image(ui);
 		ui.regButtonEvent("Button", function() {
 			//console.log(obj.uid);
 			util.externalEval("window.open('/" + obj.uid + ".html','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350\");");
