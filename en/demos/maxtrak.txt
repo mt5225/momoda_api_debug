@@ -64,9 +64,9 @@ util.addEventListener("click", function (event) {
 // define moving method
 function move_to_next(obj) {
 	obj.moveTo({
-		"pos": util.randomVector3Around(obj, 1, 0, 1), // random location
-		"delay": 3.0,
-		"speed": 0.3,
+		"pos": util.randomVector3Around(obj, 2, 0, 2), // random location
+		"delay": 2.0,
+		"speed": 0.5,
 		"oncomplete": function () {
 			move_to_next(obj);
 		}
@@ -91,16 +91,35 @@ function change_ui_image(ui) {
 
 //////////////////////////
 //show banner
+var container01 = object.find("container01");
+var container02 = object.find("container02");
+container01.addProperty("info", "KNAADT188");
+container01.addProperty("status", "Close");
+container02.addProperty("info", "KNA6934J7");
+container02.addProperty("status", "Close");
+
 function show_banner(obj) {
 	var offsetY = obj.size.y;
 	ui.setObject(obj, Vector3(0, offsetY, 0));
-	//ui.setText("Button/Text", obj.uid);
 	ui.setText("Button/Text", obj.getProperty("info"));
 	change_ui_image(ui);
+
+	if(obj.uid == "container01" ||  obj.uid == "container02") {
+		var htmlName = null;
+		if(obj.getProperty("status") == 'Open') {
+			htmlName = obj.uid + "_open.html";
+		} else {
+			htmlName = obj.uid + ".html";
+		}
+
+		ui.regButtonEvent("Button", function () {
+			util.externalEval("window.open('/" + htmlName + "','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350\");");
+		});
+	} else {
 	ui.regButtonEvent("Button", function () {
-		//console.log(obj.uid);
 		util.externalEval("window.open('/" + obj.uid + ".html','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350\");");
 	});
+	}
 }
 
 ///////////////////////////////////////////
@@ -279,3 +298,27 @@ util.addEventListener("levelchange", function (obj) {
 /////////////////////////////////////////////////////////////
 ///// elevator part end
 /////////////////////////////////////////////////////////////
+
+
+
+
+/////////////////////////////////////////////////////////////
+//// send alarm
+/////////////////////////////////////////////////////////////
+util.setInterval(function () {
+	server.sim.push({
+		"container01": {
+			"alarm": "Open",
+		}
+	});
+}, 1000 * 20 * 1.5);
+
+
+util.setInterval(function () {
+	if (container01.data && container01.data["alarm"]) {
+		container01.setColorFlash(true, Color.red);
+		container01.addProperty("status", "Open");
+		container02.setColorFlash(true, Color.red);
+		container02.addProperty("status", "Open");
+	}
+}, 1000 * 60);
