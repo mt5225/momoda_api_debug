@@ -19,7 +19,7 @@ obj_yellow.addProperty("info", "SEC8923");
 var obj_blue = object.create("02EC55309AEA4A95985B17D18C58CCC7", Vector3(-8, 0, -48));
 obj_blue.setScale(0.3, 0.3, 0.3);
 obj_blue.uid = "obj_blue";
-obj_blue.addProperty("info", "Jerry Jiang");
+obj_blue.addProperty("info", "Sandra Lee");
 
 // set color clay 
 var obj_clay = object.create("D691D9A5C10D471EBD498C8B1163C2F5", Vector3(-8, 0, -50));
