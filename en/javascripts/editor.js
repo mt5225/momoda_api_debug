@@ -91,8 +91,14 @@ jQuery(function() {
         }
 
         //添加默认编辑页面
+        var pathname = window.location.pathname;
+        var url = 'demos/maxtrak.txt';
+        if (pathname.indexOf('office') > 0) {
+            url = 'demos/office.txt';
+        }
+        console.log(url);
         $.ajax({
-			url: 'demos/maxtrak.txt',
+			url: url,
 			type: "get",
 			timeout: "5000",
 			async: false,
