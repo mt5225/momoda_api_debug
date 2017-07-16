@@ -109,6 +109,7 @@ jQuery(function () {
             dataType: "text",
             success: function (ret) {
                 //that.setEditorText(ret);
+                console.log(ret);
                 registerDoc("new1", ret);
             },
             error: function (ret) {
