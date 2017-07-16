@@ -85,6 +85,9 @@ jQuery(function() {
         }
 
         server = editor.ternServer;
+        if(!server) {
+            console.log ("fail to load ternServer");
+        }
 
         for(var i in exampleInterface){
             loadInterface(exampleInterface[i].file, exampleInterface[i].name);
