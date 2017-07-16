@@ -16,10 +16,6 @@ jQuery(function () {
     editor.getSession().setWrapLimitRange(null, null);
     editor.setShowPrintMargin(false);
     editor.$blockScrolling = Infinity;
-    server = editor.ternServer;
-    if (!server) {
-        console.log("fail to load ternServer");
-    }
     ace.config.loadModule('ace/ext/tern', function () {
         editor.setOptions({
             /**
@@ -88,6 +84,10 @@ jQuery(function () {
             });
         }
 
+        server = editor.ternServer;
+        if (!server) {
+            console.log("fail to load ternServer");
+        }
 
         for (var i in exampleInterface) {
             loadInterface(exampleInterface[i].file, exampleInterface[i].name);
@@ -130,6 +130,10 @@ function registerDoc(name, text) {
     name = name.substring(name.lastIndexOf("/") + 1);
     var doc = newAceDoc(text);
     doc.session = doc;
+    server = editor.ternServer;
+    if (!server) {
+        console.log("fail to load ternServer in registerDoc function");
+    }
     server.addDoc(name, doc);
     var data = {
         name: name,
