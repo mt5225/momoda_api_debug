@@ -6,7 +6,7 @@ var server,
     docs = [],
     curDoc;
 
-jQuery(function() {
+jQuery(function () {
     editor = ace.edit("editor");
     editor.getSession().setUseWorker(true);
     editor.setTheme("ace/theme/monokai");
@@ -16,6 +16,10 @@ jQuery(function() {
     editor.getSession().setWrapLimitRange(null, null);
     editor.setShowPrintMargin(false);
     editor.$blockScrolling = Infinity;
+    server = editor.ternServer;
+    if (!server) {
+        console.log("fail to load ternServer");
+    }
     ace.config.loadModule('ace/ext/tern', function () {
         editor.setOptions({
             /**
@@ -68,7 +72,7 @@ jQuery(function() {
             var xhr = new XMLHttpRequest();
             xhr.open("get", file, true);
             xhr.send();
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) c(xhr.responseText, xhr.status);
             };
         }
@@ -78,18 +82,14 @@ jQuery(function() {
         //     return new EditSession(documentText, "ace/mode/javascript");
         // }
 
-        function loadInterface(file, name){
-            load(file, function(body) {
+        function loadInterface(file, name) {
+            load(file, function (body) {
                 server.addDoc(name, newAceDoc(body));
             });
         }
 
-        server = editor.ternServer;
-        if(!server) {
-            console.log ("fail to load ternServer");
-        }
 
-        for(var i in exampleInterface){
+        for (var i in exampleInterface) {
             loadInterface(exampleInterface[i].file, exampleInterface[i].name);
         }
 
@@ -101,21 +101,21 @@ jQuery(function() {
         }
         console.log(url);
         $.ajax({
-			url: url,
-			type: "get",
-			timeout: "5000",
-			async: false,
-			data: {},
-			dataType: "text",
-			success: function(ret){
-				//that.setEditorText(ret);
-                 registerDoc("new1", ret);
-			},
-			error: function(ret){
-				alert("fail to load script");
-			}
-		});
-       
+            url: url,
+            type: "get",
+            timeout: "5000",
+            async: false,
+            data: {},
+            dataType: "text",
+            success: function (ret) {
+                //that.setEditorText(ret);
+                registerDoc("new1", ret);
+            },
+            error: function (ret) {
+                alert("fail to load script");
+            }
+        });
+
     });
 
     docsBindClick();
@@ -137,7 +137,7 @@ function registerDoc(name, text) {
     };
     docs.push(data);
     $("<li></li>").text(name).insertBefore($("#docs #addFile"));
-    if(!curDoc){
+    if (!curDoc) {
         curDoc = data;
         selectDoc(docs.length - 1);
     }
@@ -161,25 +161,25 @@ function selectDoc(pos) {
 
 //bind click on docs (tabs) to change tab
 function docsBindClick() {
-    $('#docs').on('click', function(e) {
+    $('#docs').on('click', function (e) {
         var tabs = $("#docs li");
-        for(var i in tabs){
-            if(tabs[i] == e.target){
+        for (var i in tabs) {
+            if (tabs[i] == e.target) {
                 return selectDoc(i);
             }
         }
     });
-    
-    $("#addFile").on("click", function(){
-        for(var i = 1; i < 20; i++){
+
+    $("#addFile").on("click", function () {
+        for (var i = 1; i < 20; i++) {
             var find = false;
             var name = "new" + i;
-            for(var j in docs){
-                if(docs[j].name == name){
+            for (var j in docs) {
+                if (docs[j].name == name) {
                     find = true;
                 }
             }
-            if(!find){
+            if (!find) {
                 registerDoc(name, "");
                 break;
             }
@@ -187,17 +187,17 @@ function docsBindClick() {
     })
 }
 
-function getCodes(){
+function getCodes() {
     var codes = [];
-    for(var i in docs){
+    for (var i in docs) {
         codes.push(docs[i].doc.getValue());
     }
     return codes;
 }
 
-function resetDocs(){
+function resetDocs() {
     $("#docs li").remove();
-    for(var i in docs) {
+    for (var i in docs) {
         server.delDoc(docs[i].name);
     }
     docs.length = 0;
