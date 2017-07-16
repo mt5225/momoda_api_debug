@@ -130,10 +130,6 @@ function registerDoc(name, text) {
     name = name.substring(name.lastIndexOf("/") + 1);
     var doc = newAceDoc(text);
     doc.session = doc;
-    server = editor.ternServer;
-    if (!server) {
-        console.log("fail to load ternServer in registerDoc function");
-    }
     server.addDoc(name, doc);
     var data = {
         name: name,
