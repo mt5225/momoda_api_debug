@@ -110,7 +110,7 @@ jQuery(function () {
             success: function (ret) {
                 //that.setEditorText(ret);
                 console.log(ret);
-                registerDoc("new1", ret);
+                //registerDoc("new1", ret);
             },
             error: function (ret) {
                 alert("fail to load script");
@@ -181,7 +181,7 @@ function docsBindClick() {
                 }
             }
             if (!find) {
-                //registerDoc(name, "");
+                registerDoc(name, "");
                 break;
             }
         }
