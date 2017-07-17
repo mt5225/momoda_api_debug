@@ -181,7 +181,7 @@ function docsBindClick() {
                 }
             }
             if (!find) {
-                registerDoc(name, "");
+                //registerDoc(name, "");
                 break;
             }
         }
