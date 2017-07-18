@@ -33,7 +33,7 @@ var ui = null;
 // init banner
 util.download({
 	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/outline_button.bundle",
-	"success": function (res) {
+	"success": function (res) { 
 		ui = gui.create(res);
 		ui.setObject(null, null);
 		ui.setScale(0.3, 0.3);
@@ -91,7 +91,7 @@ function change_ui_image(ui) {
 
 //////////////////////////
 //show banner
-var container01 = object.find("container01");
+var   = object.find("container01");
 var container02 = object.find("container02");
 container01.addProperty("info", "KNAADT188");
 container01.addProperty("status", "Close");
