@@ -33,7 +33,7 @@ var ui = null;
 // init banner
 util.download({
 	"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/outline_button.bundle",
-	"success": function (res) { 
+	"success": function (res) {
 		ui = gui.create(res);
 		ui.setObject(null, null);
 		ui.setScale(0.3, 0.3);
@@ -91,7 +91,7 @@ function change_ui_image(ui) {
 
 //////////////////////////
 //show banner
-var   = object.find("container01");
+var container01 = object.find("container01");
 var container02 = object.find("container02");
 container01.addProperty("info", "KNAADT188");
 container01.addProperty("status", "Close");
@@ -159,12 +159,28 @@ function init_balloon(res) {
 
 };
 
-gui.createButton("CAM", Rect(100, 50, 70, 30), function () {
-	util.download({
-		"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/balloon_button.bundle",
-		"success": init_balloon
-	});
+function init_cam_gui(textures) {
+	var y = 45;
+	var sz = 40;
 
+	gui.createButton({
+		"rect":Rect(85, y, sz, sz), 
+		"normal":textures["pointSearchOpen.png"],
+		"active":textures["pointSearchClose.png"],
+		"onclick":function() {
+	    	util.download({
+				"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/balloon_button.bundle",
+				"success": init_balloon
+			});
+		}
+	});
+}
+
+//init camera
+var camurl = "http://www.3dmomoda.com/mmdclient/script/examples/demos/gui_images.zip"
+util.downloadTextures({
+    "url": camurl, 
+    "success": init_cam_gui
 });
 
 /////////////////////////////////////
@@ -282,7 +298,6 @@ gui.createButton("B_001", Rect(10, 50, 70, 30), function () {
 	}
 });
 
-// hide menu if needed
 util.addEventListener("levelchange", function (obj) {
 	//console.log(obj.ClsID);
 	if (obj.ClsID == ObjectFactory.CLSID_WORLD) {

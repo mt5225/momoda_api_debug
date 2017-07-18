@@ -159,12 +159,28 @@ function init_balloon(res) {
 
 };
 
-gui.createButton("CAM", Rect(100, 50, 70, 30), function () {
-	util.download({
-		"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/balloon_button.bundle",
-		"success": init_balloon
-	});
+function init_cam_gui(textures) {
+	var y = 45;
+	var sz = 40;
 
+	gui.createButton({
+		"rect":Rect(85, y, sz, sz), 
+		"normal":textures["pointSearchOpen.png"],
+		"active":textures["pointSearchClose.png"],
+		"onclick":function() {
+	    	util.download({
+				"url": "http://www.3dmomoda.com/mmdclient/script/examples/demos/balloon_button.bundle",
+				"success": init_balloon
+			});
+		}
+	});
+}
+
+//init camera
+var camurl = "http://www.3dmomoda.com/mmdclient/script/examples/demos/gui_images.zip"
+util.downloadTextures({
+    "url": camurl, 
+    "success": init_cam_gui
 });
 
 /////////////////////////////////////
