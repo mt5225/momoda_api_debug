@@ -303,7 +303,7 @@ momoda.local.page = {
 	},
 	loadScene: function(object){
 		var load_url = "http://momoda.3dmmd.com/scene/downjson?sceneid=" + object.sceneId
-		if (object.sceneId === '20170109153114611633853' || object.sceneId === '20170417152241210691316' || object.sceneId === '20170418134129476336884' || object.sceneId === '20170504082603304643309' || object.sceneId === '20160329211902106773049' || object.sceneId === '20150923601692') {
+		if (object.sceneId === '20170109153114611633853' || object.sceneId === '20170417152241210691316' || object.sceneId === '20170418134129476336884' || object.sceneId === '20170504082603304643309' || object.sceneId === '20160329211902106773049' || object.sceneId === '20150923601692' || object.sceneId === '20170508194011659972') {
 			load_url =  "scenes/" + object.sceneId + ".json"; 
 		}
 		$.ajax({
