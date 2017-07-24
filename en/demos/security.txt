@@ -49,13 +49,11 @@ util.addEventListener("mousedown", function (event) {
 
 // register mouse click event
 util.addEventListener("click", function (event) {
-	if (input.getMouseButtonUp(1)) //hide the banner
+	if (input.getMouseButtonUp(1)) //right click, hide the banner
 	{
-		//console.log("hide banner");
 		ui.setObject(null, null);
 	}
 	if (event.obj) {
-		//console.log(event.obj.uid);
 		show_banner(event.obj);
 	}
 });
@@ -133,6 +131,16 @@ function show_banner(obj) {
 
 var showBalloon = true;
 var balloonList = [];
+
+function hide_all_cove() {
+	// hide cove
+	for (var i = 1; i < 5; i++) {
+		var obj = object.find("cam00" + i);
+		//todo: call method to hide camera cove
+		obj.open(false);
+	}
+};
+
 function init_balloon(res) {
 	if (showBalloon) {
 		for (var i = 1; i < 5; i++) {
@@ -145,6 +153,9 @@ function init_balloon(res) {
 			var url = "/cam00" + i + ".html";
 			ui.regButtonEvent("Button", function () {
 				util.externalEval("window.open('" + url + "','info',\"directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=350,height=350\");");
+				hide_all_cove();
+			    obj.open(true);
+				
 			});
 			array.add(balloonList, ui);
 		}
@@ -153,6 +164,7 @@ function init_balloon(res) {
 		for (var i = 0; i < 4; i++) {
 			balloonList[i].destroy();
 		}
+		hide_all_cove();
 		balloonList = [];
 		showBalloon = true;
 	}
