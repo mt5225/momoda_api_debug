@@ -302,17 +302,17 @@ momoda.local.page = {
 		});
 	},
 	loadScene: function(object){
-		var load_url = "http://uinnova.com:8083/http://momoda.3dmmd.com/scene/downjson?sceneid=" + object.sceneId
-		if (object.sceneId === '20170109153114611633853' || object.sceneId === '20170417152241210691316' || object.sceneId === '20170418134129476336884' || object.sceneId === '20170504082603304643309' || object.sceneId === '20160329211902106773049' || object.sceneId === '20150923601692' || object.sceneId === '20170508194011659972') {
-			load_url =  "scenes/" + object.sceneId + ".json"; 
-		}
+		//amazon server
+		// var load_url = "http://uinnova.com:8083/www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId;
+		//mainland server
+		var load_url = "http://uinnova.com:8083/www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId
+
 		$.ajax({
 			url: load_url,
 			type: "get",
 			timeout: "20000",
 			async: true,
 			crossDomain: true,
-			data: {},
 			dataType: "json",
 			success: function(ret){
 				if(ret.state){
@@ -321,8 +321,9 @@ momoda.local.page = {
 					momoda.local.scene.init();
 				}
 			},
-			error: function(ret){
-				alert("Fail to load scene!");
+			error: function(ret) {
+				console.log(ret);
+				alert('fail to download scene ' + object.sceneId);
 			}
 		});
 	},
