@@ -303,9 +303,9 @@ momoda.local.page = {
 	},
 	loadScene: function(object){
 		//amazon server
-		// var load_url = "http://uinnova.com:8083/www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId;
+		var load_url = "http://uinnova.com:8083/momoda.3dmmd.com/scene/downjson?sceneid=" + object.sceneId;
 		//mainland server
-		var load_url = "http://uinnova.com:8083/www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId
+		//var load_url = "http://uinnova.com:8083/www.3dmomoda.com/scene/downjson?sceneid=" + object.sceneId
 
 		$.ajax({
 			url: load_url,
@@ -314,6 +314,9 @@ momoda.local.page = {
 			async: true,
 			crossDomain: true,
 			dataType: "json",
+			headers: {
+				"Origin": "http://localhost",
+			},
 			success: function(ret){
 				if(ret.state){
 					uModel.loadJson = ret.content;
